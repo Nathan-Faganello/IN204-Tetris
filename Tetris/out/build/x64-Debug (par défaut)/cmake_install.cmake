@@ -1,8 +1,8 @@
-# Install script for directory: D:/Aurélien/Documents/ENSTA/2A/IN204/IN204-Tetris/Tetris
+# Install script for directory: C:/Users/Faga/Desktop/Nathan/ENSTA/Cours/2A/IN204/Projet/Tetris
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "D:/Aurélien/Documents/ENSTA/2A/IN204/IN204-Tetris/Tetris/out/install/x64-Debug (par défaut)")
+  set(CMAKE_INSTALL_PREFIX "C:/Users/Faga/Desktop/Nathan/ENSTA/Cours/2A/IN204/Projet/Tetris/out/install/x64-Debug (par défaut)")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "D:/Aurélien/Documents/ENSTA/2A/IN204/IN204-Tetris/Tetris/out/build/x64-Debug (par défaut)/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/Faga/Desktop/Nathan/ENSTA/Cours/2A/IN204/Projet/Tetris/out/build/x64-Debug (par défaut)/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
