@@ -13,7 +13,7 @@ const int spawn_X = 1;
 const int spawn_Y = largeur/2;
 
 //Etats possibles des cases
-enum class Etat {LIBRE, OCCUPE, MOUVEMENT};
+enum class Etat { LIBRE=0, OCCUPE=1 , MOUVEMENT=2 };
 
 class Board {
 	private :
@@ -55,7 +55,26 @@ class Board {
 			p.setRota(0);
 		}
 
-		void afficherPiece(Piece p) {
+		bool pieceSpawnable(piece p) {
+			int type = getType(p);
+			int rotation = getRota(p);
+			int x = getPosX();
+			int y = getPosY();
+
+			//On récupère la matrice associée à la pièce
+			int ReprPiece[4][4] = pieces[type][rotation];
+
+			for (int i = 0; i <= 3; i++) {
+				for (int j = 0; j <= 3; j++) {
+					if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] == 1) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+		void AfficherPiece(Piece p) {
 
 			int type = getType(p);
 			int rotation = getRota(p);
@@ -65,29 +84,204 @@ class Board {
 			//On récupère la matrice associée à la pièce
 			int ReprPiece[4][4] = pieces[type][rotation];
 
+			for (int i = 0; i <= 3; i++) {
+				for (int j = 0; j <= 3; j++) {
+					if (ReprPiece[i][j] == 1 || ReprPiece[i][j]==2) {
+						plateau[x + i - 2][y + j - 1] = 1;
+					}
+				}
+			}
+		}
 
+		void AfficherPieceMouvement(Piece p) {
 
+			int type = getType(p);
+			int rotation = getRota(p);
+			int x = getPosX();
+			int y = getPosY();
+
+			//On récupère la matrice associée à la pièce
+			int ReprPiece[4][4] = pieces[type][rotation];
+
+			for (int i = 0; i <= 3; i++) {
+				for (int j = 0; j <= 3; j++) {
+					if (ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) {
+						plateau[x + i - 2][y + j - 1] = 2;
+					}
+				}
+			}
+		}
+
+		void EffacerPieceMouvement(piece p) {
+			int type = getType(p);
+			int rotation = getRota(p);
+			int x = getPosX();
+			int y = getPosY();
+
+			//On récupère la matrice associée à la pièce
+			int ReprPiece[4][4] = pieces[type][rotation];
+
+			for (int i = 0; i <= 3; i++) {
+				for (int j = 0; j <= 3; j++) {
+					if (ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) {
+						plateau[x + i - 2][y + j - 1] = 0;
+					}
+				}
+			}
 		}
 
 		bool pieceTournable(Piece p) {
+			int type = getType(p);
+			int rotation = (getRota(p)+1)%4;
+			int x = getPosX();
+			int y = getPosY();
 
+			//On récupère la matrice associée à la pièce
+			int ReprPiece[4][4] = pieces[type][rotation];
+
+			for (int i = 0; i <= 3; i++) {
+				for (int j = 0; j <= 3; j++) {
+					if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x+i-2][y+j-1] == 1){
+						return false;
+					}
+				}
+			}
+			return true;
 		}
 
 		void tournerPiece(Piece p) {
-			//On fait fait tourner la piece
-			int newRota = ((p.getRota())+1)%4;
-			p.setRota(newRota)
+			//on verifie d'abord que l'on peut tourner la pièce
+			if (pieceTournable(p)) {
+				//Si oui, on efface la pièce dans sa position précédente et on la tourne
+				EffacerPieceMouvement(p);
+				int newRota = ((p.getRota()) + 1) % 4;
+				p.setRota(newRota);
+				AfficherPieceMouvement(p);
+			}
 		}
 
-		bool pieceDeplacable(Piece p) {
+		bool pieceDeplacableBas(Piece p) {
+			int type = getType(p);
+			int rotation = getRota(p);
+			int x = getPosX();
+			int y = getPosY()+1;
 
+			if (y >= hauteur-3 && type == 0 && (rotation = 1 || rotation == 3)) {
+				return false;
+			}
+
+			else if (y >= hauteur-1 && type == 0 && (rotation = 0 || rotation == 2)) {
+				return false;
+			}
+
+			else if (y >= hauteur-2 && type != 0) {
+				return false;
+			}
+
+			else {
+				//On récupère la matrice associée à la pièce
+				int ReprPiece[4][4] = pieces[type][rotation];
+
+				for (int i = 0; i <= 3; i++) {
+					for (int j = 0; j <= 3; j++) {
+						if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] == 1) {
+							return false;
+						}
+					}
+				}
+			}
+			return true;
 		}
 
-		void deplacerPiece(Piece p) {
+		bool pieceDeplacableGauche(Piece p) {
+			int type = getType(p);
+			int rotation = getRota(p);
+			int x = getPosX()-1;
+			int y = getPosY();
 
+			if (x >= 0 && type == 0 && (rotation = 1 || rotation == 3)) {
+				return false;
+			}
+
+			else if (y >= 2 && type == 0 && (rotation = 0 || rotation == 2)) {
+				return false;
+			}
+
+			else if (y >= 1 && type != 0) {
+				return false;
+			}
+
+			//On récupère la matrice associée à la pièce
+			int ReprPiece[4][4] = pieces[type][rotation];
+
+			for (int i = 0; i <= 3; i++) {
+				for (int j = 0; j <= 3; j++) {
+					if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] == 1) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+		bool pieceDeplacableDroite(Piece p) {
+			int type = getType(p);
+			int rotation = getRota(p);
+			int x = getPosX()+1;
+			int y = getPosY();
+
+			//On récupère la matrice associée à la pièce
+			int ReprPiece[4][4] = pieces[type][rotation];
+
+			for (int i = 0; i <= 3; i++) {
+				for (int j = 0; j <= 3; j++) {
+					if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] == 1) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+		void deplacerPieceBas(Piece p) {
+			//on verifie d'abord que l'on peut déplacer la pièce
+			if (pieceDeplacableBas(p)) {
+				//Si oui, on efface la pièce dans sa position précédente et on la déplace
+				EffacerPieceMouvement(p);
+				int newY = ((p.getPosY()) + 1);
+				p.setPosY(NewY);
+				AfficherPieceMouvement(p);
+			}
+		}
+
+		void deplacerPieceGauche(Piece p) {
+			//on verifie d'abord que l'on peut déplacer la pièce
+			if (pieceDeplacableGauche(p)) {
+				//Si oui, on efface la pièce dans sa position précédente et on la déplace
+				EffacerPieceMouvement(p);
+				int newX = ((p.getPosX()) - 1);
+				p.setPosX(NewX);
+				AfficherPieceMouvement(p);
+			}
+		}
+
+		void deplacerPieceDroite(Piece p) {
+			//on verifie d'abord que l'on peut déplacer la pièce
+			if (pieceDeplacableDroite(p)) {
+				//Si oui, on efface la pièce dans sa position précédente et on la déplace
+				EffacerPieceMouvement(p);
+				int newX = ((p.getPosX()) + 1);
+				p.setPosX(NewX);
+				AfficherPieceMouvement(p);
+			}
 		}
 
 
+		void TomberPiece(piece p) {
+			while (pieceDeplacableBas(p) ){
+				deplacerPieceBas(p);
+			}
+		}
 
 };
 
