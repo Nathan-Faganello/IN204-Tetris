@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include "piece.h"
 
+
 //dimensions du plateau de jeu
 const int hauteur = 22;
 const int largeur = 10;
@@ -80,6 +81,29 @@ class Board {
 			int rotation = getRota(p);
 			int x = getPosX();
 			int y = getPosY();
+
+			//on associe la bonne couleur aux pièces
+			if (type == I) {
+				p.setCouleur(CYAN);
+			}
+			else if (type == O) {
+				p.setCouleur(JAUNE);
+			}
+			else if (type == T) {
+				p.setCouleur(ORANGE);
+			}
+			else if (type == L) {
+				p.setCouleur(VIOLET);
+			}
+			else if (type == J) {
+				p.setCouleur(BLEU);
+			}
+			else if (type == Z) {
+				p.setCouleur(ROUGE);
+			}
+			else {
+				p.setCouleur(VERT);
+			}
 
 			//On récupère la matrice associée à la pièce
 			int ReprPiece[4][4] = pieces[type][rotation];
@@ -166,15 +190,17 @@ class Board {
 			int x = getPosX();
 			int y = getPosY()+1;
 
-			if (y >= hauteur-3 && type == 0 && (rotation = 1 || rotation == 3)) {
+
+			//on est obligé de distinguer les cas en fonction des pièces et rotation car elles ne prennent pas toutes exactement la même place
+			if (y >= hauteur-3 && (type == 0 && (rotation == 1 || rotation == 3)) ) {
 				return false;
 			}
 
-			else if (y >= hauteur-1 && type == 0 && (rotation = 0 || rotation == 2)) {
+			else if (y >= hauteur-1 && (type == 0 && (rotation = 0 || rotation == 2)) || (type == 2 && rotation == 2) || (type == 3 && rotation == 2) || (type == 4 && rotation == 2) || (type == 3 && rotation == 2)) {
 				return false;
 			}
 
-			else if (y >= hauteur-2 && type != 0) {
+			else if (y >= hauteur-2) {
 				return false;
 			}
 
@@ -199,25 +225,27 @@ class Board {
 			int x = getPosX()-1;
 			int y = getPosY();
 
-			if (x >= 0 && type == 0 && (rotation = 1 || rotation == 3)) {
+			if (x <= 0 && ((type == 0 && (rotation = 1 || rotation == 3)) || (type == 2 && rotation == 3) || (type == 3 && rotation == 3) || (type == 4 && rotation == 3))){
 				return false;
 			}
 
-			else if (y >= 2 && type == 0 && (rotation = 0 || rotation == 2)) {
+			else if (y <= 2 && type == 0 && (rotation = 0 || rotation == 2)) {
 				return false;
 			}
 
-			else if (y >= 1 && type != 0) {
+			else if (y <= 1) {
 				return false;
 			}
 
-			//On récupère la matrice associée à la pièce
-			int ReprPiece[4][4] = pieces[type][rotation];
+			else {
+				//On récupère la matrice associée à la pièce
+				int ReprPiece[4][4] = pieces[type][rotation];
 
-			for (int i = 0; i <= 3; i++) {
-				for (int j = 0; j <= 3; j++) {
-					if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] == 1) {
-						return false;
+				for (int i = 0; i <= 3; i++) {
+					for (int j = 0; j <= 3; j++) {
+						if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] == 1) {
+							return false;
+						}
 					}
 				}
 			}
@@ -230,20 +258,30 @@ class Board {
 			int x = getPosX()+1;
 			int y = getPosY();
 
-			//On récupère la matrice associée à la pièce
-			int ReprPiece[4][4] = pieces[type][rotation];
+			if (y >= largeur - 1 && ((type == 0 && (rotation == 1 || rotation == 3)) || type == 1 || (type == 2 && (rotation == 1)) || (type == 3 && (rotation == 1)) || (type == 4 && (rotation == 1)) || (type == 5 && (rotation == 1 || rotation == 3)) || (type == 6 && (rotation == 1 || rotation == 3)))) {
+				return false;
+			}
 
-			for (int i = 0; i <= 3; i++) {
-				for (int j = 0; j <= 3; j++) {
-					if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] == 1) {
-						return false;
+			else if (y >= largeur - 2) {
+				return false;
+			}
+
+			else {
+				//On récupère la matrice associée à la pièce
+				int ReprPiece[4][4] = pieces[type][rotation];
+
+				for (int i = 0; i <= 3; i++) {
+					for (int j = 0; j <= 3; j++) {
+						if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] == 1) {
+							return false;
+						}
 					}
 				}
 			}
 			return true;
 		}
 
-		void deplacerPieceBas(Piece p) {
+		bool deplacerPieceBas(Piece p) {
 			//on verifie d'abord que l'on peut déplacer la pièce
 			if (pieceDeplacableBas(p)) {
 				//Si oui, on efface la pièce dans sa position précédente et on la déplace
@@ -251,7 +289,17 @@ class Board {
 				int newY = ((p.getPosY()) + 1);
 				p.setPosY(NewY);
 				AfficherPieceMouvement(p);
+
+				return false;
 			}
+
+			else {
+				AfficherPiece(p);
+
+				return true
+			}
+
+
 		}
 
 		void deplacerPieceGauche(Piece p) {
