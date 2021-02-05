@@ -311,6 +311,37 @@ class Board {
 			}
 		}
 
+		int ligne_full() {
+			int NbLignesSuppr = 0;
+			int cases_pleines;
+
+			for (int i=0; i<hauteur; i++) {
+				cases_pleines = 0;
+
+				//on parcourt la ligne en comptant le nombre de cases pleines pour savoir si la ligne est pleine
+				for (int j=0; j<largeur; j++) {
+					if (plateau[i][j] != Couleur::LIBRE) {
+						cases_pleines++;
+					}
+				}
+
+				//Si elle l'est, on déplace tout ce qui est au dessus vers le bas et on vide la ligne du haut du tableau
+				if (cases_pleines == largeur) {
+					NbLignesSuppr++;
+					for (int k=i; k>0; k--) {
+						memmove(&plateau[k], &plateau[k-1], largeur*sizeof(int));
+					}
+
+					for (int k=0; k<largeur; k++) {
+						plateau[0][k]==Couleur::LIBRE;
+					}
+				}
+			}
+
+			return NbLignesSuppr;
+		}
+
+
 };
 
 
