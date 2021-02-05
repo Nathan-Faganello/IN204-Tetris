@@ -6,14 +6,14 @@ EXEC=sfml-app
 all: $(EXEC)
 
 
-sfml-app: main.o
-	$(CC) -o $@ $^ $(LDFLAGS)
+sfml-app: main.cpp
+	$(CC) $(LDFLAGS) $^ -o $@
 
-main.o: main.cpp
-	$(CC) -c $^ $(CFLAGS)
+#main.o: main.cpp
+#	$(CC) -c $^ $(CFLAGS)
 
 clean:
 	rm -rf *.o
 
-mrproper: clean
-	rm -rf hello
+#mrproper: clean
+#rm -rf main

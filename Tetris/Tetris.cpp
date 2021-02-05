@@ -7,6 +7,5 @@ using namespace std;
 
 int main()
 {
-	cout << "Hello CMake." << endl;
-	return 0;
+	 sf::Window window(sf::VideoMode(1080, 720), "Tetris-IN204-Faganello-Laforge");
 }
