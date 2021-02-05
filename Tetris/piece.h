@@ -205,7 +205,7 @@ static const int pieces[NB_PIECE][NB_ROTA][TAILLE_MAT][TAILLE_MAT] = {
 
 
 enum class Type = { I, O, T, L, J, Z, S };
-enum class Couleur = { CYAN, JAUNE, ORANGE, VIOLET, BLEU, ROUGE, VERT };
+enum class Couleur = { CYAN, JAUNE, ORANGE, VIOLET, BLEU, ROUGE, VERT, LIBRE };
 
 class Piece {
 private:
