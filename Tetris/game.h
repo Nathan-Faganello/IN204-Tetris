@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
-
+#include<SFML/System/Time.hpp>
+#include"board.h"
+#include"piece.h"
 
 
 int calculScore(int score, int niveau, int nbLignes){
@@ -27,6 +29,39 @@ int calculScore(int score, int niveau, int nbLignes){
   return score+(niveau+1)*ajout;
 }
 
+void mettrePause(bool etat_pause) {
+  etat_pause = true;
+}
+
+void mettrePlay(bool etat_pause) {
+  etat_pause = false;
+}
+
+
+void finJeu(etat bool fin_jeu) {
+  fin_jeu = true;
+}
+
+
+void update(sf::Time deltaT, sf::Time TempsChute, Board plateau, sf::Time dropSpeed) {
+
+  TempsChute = TempsChute - deltaT;
+
+  if (TempsChute<=0) {
+
+    TempsChute = dropSpeed;
+
+    if (plateau.deplacerPieceBas(plateau.piece_courante)) {
+
+      plateau.piece_courante = plateau.piece_suivante;
+      nouvellePiece(plateau.piece_suivante);
+
+    }
+  }
+
+
+
+}
 
 
 
