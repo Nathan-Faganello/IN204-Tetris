@@ -87,6 +87,17 @@ int main()
 					valNiveau.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
 					valNiveau.setPosition(sf::Vector2f(1080/2.0f,350));
 
+          sf::Text text;
+					text.setString("Choisir avec les fleches directionnelles gauche et droite");
+					text.setFont(font);
+					text.setCharacterSize(25);
+					text.setFillColor(sf::Color::White);
+
+					textRect = text.getLocalBounds();
+					text.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+					text.setPosition(sf::Vector2f(1080/2.0f,420));
+					window.draw(text);
+
 					window.draw(affNiveau);
 					window.draw(valNiveau);
 					window.display();
