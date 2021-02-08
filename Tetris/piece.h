@@ -9,7 +9,7 @@ const int TAILLE_MAT = 4;
 
 //définition de l'ensemble des pièces et de leurs rotations, représentées dans le sens de rotation horaire
 
-static const int pieces[NB_PIECE][NB_ROTA][TAILLE_MAT][TAILLE_MAT] = {
+static const int pieces[NB_PIECE][NB_ROTA][TAILLE_MAT][TAILLE_MAT] {
 
 	{//définition des pièces I 
 		{
@@ -201,11 +201,11 @@ static const int pieces[NB_PIECE][NB_ROTA][TAILLE_MAT][TAILLE_MAT] = {
 		}
 	}
 
-}
+};
 
 
-enum class Type = { I, O, T, L, J, Z, S };
-enum class Couleur = { CYAN, JAUNE, ORANGE, VIOLET, BLEU, ROUGE, VERT, LIBRE };
+enum class Type { I, O, T, L, J, Z, S };
+enum class Couleur { CYAN, JAUNE, ORANGE, VIOLET, BLEU, ROUGE, VERT, LIBRE };
 
 class Piece {
 private:
