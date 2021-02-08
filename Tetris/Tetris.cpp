@@ -13,6 +13,7 @@ using namespace std;
 int main()
 {
 	 sf::Window window(sf::VideoMode(1080, 720), "Tetris-IN204-Faganello-Laforge");
+	 
 
 	 sf::Time dropSpeed = sf::seconds(1.5)*pow(1.1, (double)niveau);
 
@@ -20,4 +21,5 @@ int main()
 	 bool etat_pause = false;
 
 	 
+
 }

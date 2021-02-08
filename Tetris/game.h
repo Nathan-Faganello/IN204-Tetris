@@ -22,7 +22,7 @@ int calculScore(int score, int niveau, int nbLignes){
       ajout=1200;
       break;
     default:
-      std::cerr<<"Wrong number of lines destructed"<<std::enl;
+      std::cerr<<"Wrong number of lines destructed"<<std::endl;
       ajout=0;
       break;
   }

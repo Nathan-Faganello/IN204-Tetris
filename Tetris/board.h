@@ -26,7 +26,7 @@ class Board {
 			//Initialisation du plateau de jeu : le plateau est numéroté de haut en bas (y)(ligne 0 en haut), et de gauche à droite (x)
 			for (int i = 0; i < hauteur; i++) {
 				for (int j = 0; j < largeur; j++) {
-					plateau[i][j] = Couleur::LIBRE;
+					plateau[i][j] = (int)Couleur::LIBRE;
 				}
 			}
 		};
@@ -35,10 +35,12 @@ class Board {
 			//on remet toutes les cases sur LIBRE
 			for (int i = 0; i < hauteur; i++) {
 				for (int j = 0; j < largeur; j++) {
-					plateau[i][j] = Couleur::LIBRE;
+					plateau[i][j] = (int)Couleur::LIBRE;
 				}
 			}
 		}
+
+
 
 		void nouvellePiece(Piece p) {
 
@@ -54,7 +56,7 @@ class Board {
 			p.setRota(0);
 		}
 
-		bool pieceSpawnable(piece p) {
+		bool pieceSpawnable(Piece p) {
 			Type type = getType(p);
 			int rotation = getRota(p);
 			int x = getPosX();
@@ -65,7 +67,7 @@ class Board {
 
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
-					if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] != Couleur::LIBRE) {
+					if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] != (int)Couleur::LIBRE) {
 						return false;
 					}
 				}
@@ -109,14 +111,14 @@ class Board {
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
 					if (ReprPiece[i][j] == 1 || ReprPiece[i][j]==2) {
-						plateau[x + i - 2][y + j - 1] = p.couleur;
+						plateau[x + i - 2][y + j - 1] = (int)p.couleur;
 					}
 				}
 			}
 		}
 
 
-		void EffacerPiece(piece p) {
+		void EffacerPiece(Piece p) {
 			Type type = getType(p);
 			int rotation = getRota(p);
 			int x = getPosX();
@@ -130,7 +132,7 @@ class Board {
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
 					if (ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) {
-						plateau[x + i - 2][y + j - 1] = Couleur::LIBRE;
+						plateau[x + i - 2][y + j - 1] = (int)Couleur::LIBRE;
 					}
 				}
 			}
@@ -156,7 +158,7 @@ class Board {
 					}
 
 					//si elle ne sort pas du plateau, on teste qu'elle n'entre pas en collision avec d'autres pièces déjà posées
-					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x+i-2][y+j-1] != Couleur::LIBRE){
+					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x+i-2][y+j-1] != (int)Couleur::LIBRE){
 						return false;
 					}
 				}
@@ -195,7 +197,7 @@ class Board {
 					}	
 
 					//si elle ne sort pas du plateau, on teste qu'elle n'entre pas en collision avec d'autres pièces déjà posées
-					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x+i-2][y+j-1] != Couleur::LIBRE){
+					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x+i-2][y+j-1] != (int)Couleur::LIBRE){
 						return false;
 					}
 				}
@@ -225,7 +227,7 @@ class Board {
 						}
 					}
 
-					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] != Couleur::LIBRE) {
+					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] != (int)Couleur::LIBRE) {
 						return false;
 					}
 				}
@@ -254,7 +256,7 @@ class Board {
 						}
 					}
 
-					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] != Couleur::LIBRE) {
+					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] != (int)Couleur::LIBRE) {
 						return false;
 					}
 				}
@@ -305,7 +307,7 @@ class Board {
 		}
 
 
-		void TomberPiece(piece p) {
+		void TomberPiece(Piece p) {
 			while (pieceDeplacableBas(p) ){
 				deplacerPieceBas(p);
 			}
@@ -320,7 +322,7 @@ class Board {
 
 				//on parcourt la ligne en comptant le nombre de cases pleines pour savoir si la ligne est pleine
 				for (int j=0; j<largeur; j++) {
-					if (plateau[i][j] != Couleur::LIBRE) {
+					if (plateau[i][j] != (int)Couleur::LIBRE) {
 						cases_pleines++;
 					}
 				}
@@ -333,7 +335,7 @@ class Board {
 					}
 
 					for (int k=0; k<largeur; k++) {
-						plateau[0][k]==Couleur::LIBRE;
+						plateau[0][k]==(int)Couleur::LIBRE;
 					}
 				}
 			}
