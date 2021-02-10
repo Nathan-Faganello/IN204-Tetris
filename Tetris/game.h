@@ -54,7 +54,7 @@ void update(sf::Time deltaT, sf::Time TempsChute, Board plateau, sf::Time dropSp
     if (plateau.deplacerPieceBas(plateau.piece_courante)) {
 
       plateau.piece_courante = plateau.piece_suivante;
-      nouvellePiece(plateau.piece_suivante);
+      plateau.setPieceSuivante();
 
     }
   }
