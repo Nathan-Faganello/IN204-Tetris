@@ -10,11 +10,11 @@ all: $(EXEC)
 sfml-app: main.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-main.o: main.cpp
-	$(CC) -c $^ $(CFLAGS)
+main.o: main.cpp piece.h
+	$(CC) -c $< $(CFLAGS)
 
 clean:
 	rm -rf *.o
 
 mrproper: clean
-	rm -rf hello
+	rm -rf sfml-app

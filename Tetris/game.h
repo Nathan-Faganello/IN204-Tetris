@@ -1,6 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
-#include<SFML/System/Time.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/System/Sleep.hpp>
+#include <SFML/System/Time.hpp>
 #include"board.h"
 #include"piece.h"
 
@@ -53,16 +57,22 @@ void update(sf::Time deltaT, sf::Time TempsChute, Board plateau, sf::Time dropSp
 
     if (plateau.deplacerPieceBas(plateau.piece_courante)) {
 
-      plateau.piece_courante = plateau.piece_suivante;
+      plateau.setPieceCourante();
       plateau.setPieceSuivante();
 
     }
   }
 
 
-
 }
 
 
+void afficherScore(sf::RenderWindow &window, int score){}
+
+void afficherProchainePiece(sf::RenderWindow &window, Board board){}
+
+void afficherPlateau(sf::RenderWindow &window, Board board){}
+
+void afficherPause(sf::RenderWindow &window){}
 
 #endif // !GAME_H
