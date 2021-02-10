@@ -5,18 +5,29 @@
 #include <SFML/System/Time.hpp>
 #include <iostream>
 #include <string>
+#include <time.h>
+#include <stdlib.h>
 #include "piece.h"
+#include "board.h"
+
 
 
 
 
 int main()
 {
+    srand (time(NULL));
     sf::RenderWindow window(sf::VideoMode(1080, 720), "Tetris Faganello Laforge");
 		window.setFramerateLimit(30);
 		int niveau=0;
 		int statut=0;
     int score=0;
+
+
+    Board board;
+
+    board.setPieceSuivante();
+    board.setPieceCourante();
 
     while (window.isOpen())
     {
@@ -69,7 +80,7 @@ int main()
 
 				}
 
-				if(statut==1){  //choix du niveau
+				else if(statut==1){  //choix du niveau
 					window.clear();
 					sf::Text affNiveau;
 					affNiveau.setString("Niveau");
@@ -109,8 +120,10 @@ int main()
 					window.display();
 			}
 
-      if(statut==2){
+      else if(statut==2){ //affichage du jeu pendant 3 secondes lors de l'entrée dans celui ci (avant le début effectif)
         window.clear();
+
+
 
         //affichage cadre de jeu
 
@@ -243,7 +256,7 @@ int main()
         window.draw(npLineHori2, 2, sf::Lines);
 
         sf::Text nouvellePiece;
-        nouvellePiece.setString("Nouvelle piece :");
+        nouvellePiece.setString("Piece suivante :");
         nouvellePiece.setFont(font);
         nouvellePiece.setCharacterSize(30);
         nouvellePiece.setFillColor(sf::Color::White);
@@ -263,7 +276,7 @@ int main()
 
         sf::Color colorPiece;
 
-        Piece pieceSuivante(Type::S, 0,0,0,Couleur::CYAN);
+        Piece pieceSuivante=board.getPieceSuivante();
 
 
         switch(pieceSuivante.getCouleur()){
@@ -333,14 +346,19 @@ int main()
         window.draw(rectangle3);
         window.draw(rectangle4);
 
-
-
-
-
-
         window.display();
 
+        sf::Time t1 = sf::seconds(3.0);
+        sf::sleep(t1);
+        statut++;
 
+      }
+
+      else if(statut==3){
+        window.clear();
+
+        
+        window.display();
       }
 
 

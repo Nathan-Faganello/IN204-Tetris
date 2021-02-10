@@ -2,14 +2,17 @@
 #define BOARD_H
 
 #include <cstdlib>
+#include <string.h>
 #include "piece.h"
+#include <time.h>
+#include <stdlib.h>
 
 
 //dimensions du plateau de jeu
-const int hauteur = 22; 
+const int hauteur = 22;
 const int largeur = 10;
 
-//point d'apparition de la pièce (on prend pour référence le point de rotation de la pièce)
+//point d'apparition de la piï¿½ce (on prend pour rï¿½fï¿½rence le point de rotation de la piï¿½ce)
 const int spawn_X = 1;
 const int spawn_Y = largeur/2;
 
@@ -22,8 +25,14 @@ class Board {
 	public :
 		int plateau[hauteur][largeur];
 
+		Piece getPieceSuivante(){
+			return piece_suivante;
+		}
+		Piece getPieceCourante(){
+			return piece_courante;
+		}
 		Board() {
-			//Initialisation du plateau de jeu : le plateau est numéroté de haut en bas (y)(ligne 0 en haut), et de gauche à droite (x)
+			//Initialisation du plateau de jeu : le plateau est numï¿½rotï¿½ de haut en bas (y)(ligne 0 en haut), et de gauche ï¿½ droite (x)
 			for (int i = 0; i < hauteur; i++) {
 				for (int j = 0; j < largeur; j++) {
 					plateau[i][j] = (int)Couleur::LIBRE;
@@ -40,30 +49,33 @@ class Board {
 			}
 		}
 
-
-
-		void nouvellePiece(Piece p) {
-
-			//on place la nouvelle pièce au point de spawn
-			p.setPosX = spawn_X;
-			p.setPosY = spawn_Y;
-
-			//on définit le type de pièce
-			Type type = (Type)(rand() % 7);
-			p.setType(type);
-
-			//on définit la rotation de la pièce (on choisit toujours la première par défaut)
-			p.setRota(0);
+		void setPieceCourante(){
+			piece_courante=piece_suivante;
 		}
 
-		bool pieceSpawnable(Piece p) {
-			Type type = getType(p);
-			int rotation = getRota(p);
-			int x = getPosX();
-			int y = getPosY();
+		void setPieceSuivante(){
+			//on place la nouvelle piï¿½ce au point de spawn
+			piece_suivante.setPosX(spawn_X);
+			piece_suivante.setPosY(spawn_Y);
 
-			//On récupère la matrice associée à la pièce
-			int ReprPiece[4][4] = pieces[type][rotation];
+			//on dï¿½finit le type de piï¿½ce
+			Type type = (Type)(rand() % 7);
+			piece_suivante.setType(type);
+			piece_suivante.setCouleur((Couleur)((int)type));
+			//on dï¿½finit la rotation de la piï¿½ce (on choisit toujours la premiï¿½re par dï¿½faut)
+			piece_suivante.setRota(0);
+		}
+
+
+		bool pieceSpawnable(Piece p) {
+			int type = (int)p.getType();
+			int rotation = p.getRota();
+			int x = p.getPosX();
+			int y = p.getPosY();
+
+			//On rï¿½cupï¿½re la matrice associï¿½e ï¿½ la piï¿½ce
+			int ReprPiece[4][4];
+			memmove(ReprPiece, &(pieces[type][rotation]), 16);
 
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
@@ -77,41 +89,42 @@ class Board {
 
 		void AfficherPiece(Piece p) {
 
-			Type type = getType(p);
-			int rotation = getRota(p);
-			int x = getPosX();
-			int y = getPosY();
+			int type = (int)p.getType();
+			int rotation = p.getRota();
+			int x = p.getPosX();
+			int y = p.getPosY();
 
-			//on associe la bonne couleur aux pièces
-			if (type == Type::I) {
-				p.setCouleur(CYAN);
+			//on associe la bonne couleur aux piï¿½ces
+			if (type == (int)Type::I) {
+				p.setCouleur(Couleur::CYAN);
 			}
-			else if (type == Type::O) {
-				p.setCouleur(JAUNE);
+			else if (type == (int)Type::O) {
+				p.setCouleur(Couleur::JAUNE);
 			}
-			else if (type == Type::T) {
-				p.setCouleur(ORANGE);
+			else if (type == (int)Type::T) {
+				p.setCouleur(Couleur::ORANGE);
 			}
-			else if (type == Type::L) {
-				p.setCouleur(VIOLET);
+			else if (type == (int)Type::L) {
+				p.setCouleur(Couleur::VIOLET);
 			}
-			else if (type == Type::J) {
-				p.setCouleur(BLEU);
+			else if (type == (int)Type::J) {
+				p.setCouleur(Couleur::BLEU);
 			}
-			else if (type == Type::Z) {
-				p.setCouleur(ROUGE);
+			else if (type == (int)Type::Z) {
+				p.setCouleur(Couleur::ROUGE);
 			}
 			else {
-				p.setCouleur(VERT);
+				p.setCouleur(Couleur::VERT);
 			}
 
-			//On récupère la matrice associée à la pièce
-			int ReprPiece[4][4] = pieces[type][rotation];
+			//On rï¿½cupï¿½re la matrice associï¿½e ï¿½ la piï¿½ce
+			int ReprPiece[4][4];
+			memmove(ReprPiece, &(pieces[type][rotation]), 16);
 
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
 					if (ReprPiece[i][j] == 1 || ReprPiece[i][j]==2) {
-						plateau[x + i - 2][y + j - 1] = (int)p.couleur;
+						plateau[x + i - 2][y + j - 1] = (int)p.getCouleur();
 					}
 				}
 			}
@@ -119,13 +132,14 @@ class Board {
 
 
 		void EffacerPiece(Piece p) {
-			Type type = getType(p);
-			int rotation = getRota(p);
-			int x = getPosX();
-			int y = getPosY();
+			int type = (int)p.getType();
+			int rotation = p.getRota();
+			int x = p.getPosX();
+			int y = p.getPosY();
 
-			//On récupère la matrice associée à la pièce
-			int ReprPiece[4][4] = pieces[type][rotation];
+			//On rï¿½cupï¿½re la matrice associï¿½e ï¿½ la piï¿½ce
+			int ReprPiece[4][4];
+			memmove(ReprPiece, &(pieces[type][rotation]), 16);
 
 
 
@@ -139,13 +153,14 @@ class Board {
 		}
 
 		bool pieceTournable(Piece p) {
-			int type = getType(p);
-			int rotation = (getRota(p)+1)%4;
-			int x = getPosX();
-			int y = getPosY();
+			int type = (int)p.getType();
+			int rotation = (p.getRota()+1)%4;
+			int x = p.getPosX();
+			int y = p.getPosY();
 
-			//On récupère la matrice associée à la pièce
-			int ReprPiece[4][4] = pieces[type][rotation];
+			//On rï¿½cupï¿½re la matrice associï¿½e ï¿½ la piï¿½ce
+			int ReprPiece[4][4];
+			memmove(ReprPiece, &(pieces[type][rotation]),16);
 
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
@@ -157,7 +172,7 @@ class Board {
 						}
 					}
 
-					//si elle ne sort pas du plateau, on teste qu'elle n'entre pas en collision avec d'autres pièces déjà posées
+					//si elle ne sort pas du plateau, on teste qu'elle n'entre pas en collision avec d'autres piï¿½ces dï¿½jï¿½ posï¿½es
 					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x+i-2][y+j-1] != (int)Couleur::LIBRE){
 						return false;
 					}
@@ -167,24 +182,25 @@ class Board {
 		}
 
 		void tournerPiece(Piece p) {
-			//on verifie d'abord que l'on peut tourner la pièce
+			//on verifie d'abord que l'on peut tourner la piï¿½ce
 			if (pieceTournable(p)) {
-				//Si oui, on efface la pièce dans sa position précédente et on la tourne
+				//Si oui, on efface la piï¿½ce dans sa position prï¿½cï¿½dente et on la tourne
 				int newRota = ((p.getRota()) + 1) % 4;
 				p.setRota(newRota);;
 			}
 		}
 
 		bool pieceDeplacableBas(Piece p) {
-			Type type = getType(p);
-			int rotation = getRota(p);
-			int x = getPosX();
-			int y = getPosY()+1;
+			int type = (int)p.getType();
+			int rotation = p.getRota();
+			int x = p.getPosX();
+			int y = p.getPosY()+1;
 
 			EffacerPiece(p);
 
-			//On récupère la matrice associée à la pièce
-			int ReprPiece[4][4] = pieces[type][rotation];
+			//On rï¿½cupï¿½re la matrice associï¿½e ï¿½ la piï¿½ce
+			int ReprPiece[4][4];
+			memmove(ReprPiece, &(pieces[type][rotation]),16);
 
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
@@ -194,9 +210,9 @@ class Board {
 						if (ReprPiece[i][j]==1 || ReprPiece[i][j]==2){
 							return false;
 						}
-					}	
+					}
 
-					//si elle ne sort pas du plateau, on teste qu'elle n'entre pas en collision avec d'autres pièces déjà posées
+					//si elle ne sort pas du plateau, on teste qu'elle n'entre pas en collision avec d'autres piï¿½ces dï¿½jï¿½ posï¿½es
 					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x+i-2][y+j-1] != (int)Couleur::LIBRE){
 						return false;
 					}
@@ -206,16 +222,17 @@ class Board {
 		}
 
 		bool pieceDeplacableGauche(Piece p) {
-			Type type = getType(p);
-			int rotation = getRota(p);
-			int x = getPosX()-1;
-			int y = getPosY();
+			int type = (int)p.getType();
+			int rotation = p.getRota();
+			int x = p.getPosX()-1;
+			int y = p.getPosY();
 
 			EffacerPiece(p);
 
 
-			//On récupère la matrice associée à la pièce
-			int ReprPiece[4][4] = pieces[type][rotation];
+			//On rï¿½cupï¿½re la matrice associï¿½e ï¿½ la piï¿½ce
+			int ReprPiece[4][4];
+			memmove(ReprPiece, &(pieces[type][rotation]),16);
 
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
@@ -237,15 +254,16 @@ class Board {
 		}
 
 		bool pieceDeplacableDroite(Piece p) {
-			int type = getType(p);
-			int rotation = getRota(p);
-			int x = getPosX()+1;
-			int y = getPosY();
+			int type = (int)p.getType();
+			int rotation = p.getRota();
+			int x = p.getPosX()+1;
+			int y = p.getPosY();
 
 			EffacerPiece(p);
 
-			//On récupère la matrice associée à la pièce
-			int ReprPiece[4][4] = pieces[type][rotation];
+			//On rï¿½cupï¿½re la matrice associï¿½e ï¿½ la piï¿½ce
+			int ReprPiece[4][4];
+			memmove(ReprPiece, &(pieces[type][rotation]),16);
 
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
@@ -265,11 +283,11 @@ class Board {
 		}
 
 		bool deplacerPieceBas(Piece p) {
-			//on verifie d'abord que l'on peut déplacer la pièce
+			//on verifie d'abord que l'on peut dï¿½placer la piï¿½ce
 			if (pieceDeplacableBas(p)) {
-				//Si oui, on efface la pièce dans sa position précédente et on la déplace
+				//Si oui, on efface la piï¿½ce dans sa position prï¿½cï¿½dente et on la dï¿½place
 				int newY = ((p.getPosY()) + 1);
-				p.setPosY(NewY);
+				p.setPosY(newY);
 				AfficherPiece(p);
 
 				return false;
@@ -278,29 +296,29 @@ class Board {
 			else {
 				AfficherPiece(p);
 
-				return true
+				return true;
 			}
 
 
 		}
 
 		void deplacerPieceGauche(Piece p) {
-			//on verifie d'abord que l'on peut déplacer la pièce
+			//on verifie d'abord que l'on peut dï¿½placer la piï¿½ce
 			if (pieceDeplacableGauche(p)) {
-				//Si oui, on efface la pièce dans sa position précédente et on la déplace
+				//Si oui, on efface la piï¿½ce dans sa position prï¿½cï¿½dente et on la dï¿½place
 				int newX = ((p.getPosX()) - 1);
-				p.setPosX(NewX);
+				p.setPosX(newX);
 			}
 
 			AfficherPiece(p);
 		}
 
 		void deplacerPieceDroite(Piece p) {
-			//on verifie d'abord que l'on peut déplacer la pièce
+			//on verifie d'abord que l'on peut dï¿½placer la piï¿½ce
 			if (pieceDeplacableDroite(p)) {
-				//Si oui, on efface la pièce dans sa position précédente et on la déplace
+				//Si oui, on efface la piï¿½ce dans sa position prï¿½cï¿½dente et on la dï¿½place
 				int newX = ((p.getPosX()) + 1);
-				p.setPosX(NewX);
+				p.setPosX(newX);
 			}
 
 			AfficherPiece(p);
@@ -327,7 +345,7 @@ class Board {
 					}
 				}
 
-				//Si elle l'est, on déplace tout ce qui est au dessus vers le bas et on vide la ligne du haut du tableau
+				//Si elle l'est, on dï¿½place tout ce qui est au dessus vers le bas et on vide la ligne du haut du tableau
 				if (cases_pleines == largeur) {
 					NbLignesSuppr++;
 					for (int k=i; k>0; k--) {
@@ -335,7 +353,7 @@ class Board {
 					}
 
 					for (int k=0; k<largeur; k++) {
-						plateau[0][k]==(int)Couleur::LIBRE;
+						plateau[0][k]=(int)Couleur::LIBRE;
 					}
 				}
 			}

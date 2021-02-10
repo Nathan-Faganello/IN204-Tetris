@@ -7,11 +7,11 @@ const int NB_ROTA = 4;
 const int TAILLE_MAT = 4;
 
 
-//définition de l'ensemble des pièces et de leurs rotations, représentées dans le sens de rotation horaire
+//dï¿½finition de l'ensemble des piï¿½ces et de leurs rotations, reprï¿½sentï¿½es dans le sens de rotation horaire
 
 static const int pieces[NB_PIECE][NB_ROTA][TAILLE_MAT][TAILLE_MAT] {
 
-	{//définition des pièces I 
+	{//dï¿½finition des piï¿½ces I
 		{
 			{0, 0, 0, 0},
 			{ 1, 1, 2, 1 },
@@ -42,7 +42,7 @@ static const int pieces[NB_PIECE][NB_ROTA][TAILLE_MAT][TAILLE_MAT] {
 
 	},
 
-	{//def des pièces O
+	{//def des piï¿½ces O
 
 		{
 			{0, 0, 0, 0},
@@ -70,7 +70,7 @@ static const int pieces[NB_PIECE][NB_ROTA][TAILLE_MAT][TAILLE_MAT] {
 		}
 	},
 
-	{//def des pièces T
+	{//def des piï¿½ces T
 		{
 			{0, 0, 0, 0},
 			{0, 1, 2, 1},
@@ -96,7 +96,7 @@ static const int pieces[NB_PIECE][NB_ROTA][TAILLE_MAT][TAILLE_MAT] {
 			{0, 0, 0, 0}
 		}
 	},
-	{//def des pièces L
+	{//def des piï¿½ces L
 		{
 			{0, 0, 0, 0},
 			{0, 1, 2, 1},
@@ -122,7 +122,7 @@ static const int pieces[NB_PIECE][NB_ROTA][TAILLE_MAT][TAILLE_MAT] {
 			{0, 0, 0, 0}
 		}
 	},
-	{//def des pièces J
+	{//def des piï¿½ces J
 		{
 			{0, 0, 0, 0},
 			{0, 1, 2, 1},
@@ -148,7 +148,7 @@ static const int pieces[NB_PIECE][NB_ROTA][TAILLE_MAT][TAILLE_MAT] {
 			{0, 0, 0, 0},
 		}
 	},
-	{//def des pièces Z
+	{//def des piï¿½ces Z
 		{
 			{0, 0, 0, 0},
 			{0, 1, 2, 0},
@@ -173,8 +173,8 @@ static const int pieces[NB_PIECE][NB_ROTA][TAILLE_MAT][TAILLE_MAT] {
 			{0, 1, 0, 0},
 			{0, 0, 0, 0},
 		}
-	},	
-	{//def pièces S
+	},
+	{//def piï¿½ces S
 		{
 			{0, 0, 0, 0},
 			{0, 0, 2, 1},
@@ -216,7 +216,7 @@ private:
 	Couleur couleur;
 
 public:
-	Piece();
+	Piece(){}
 	Piece(Type theType, int theRota, int theX, int theY, Couleur theColor): type(theType), rotation(theRota), position_X(theX), position_Y(theY), couleur(theColor) {}
 	void setType(Type theType) {
 		type = theType;
@@ -230,7 +230,7 @@ public:
 	void setPosX(int theX) {
 		position_X = theX;
 	}
-	void setPoxY(int theY) {
+	void setPosY(int theY) {
 		position_Y = theY;
 	}
 	Type getType() {
@@ -251,4 +251,3 @@ public:
 };
 
 #endif // !PIECE_H
-
