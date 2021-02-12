@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "piece.h"
 #include "board.h"
+#include "game.h"
 
 
 
@@ -127,7 +128,7 @@ int main()
 
         //affichage cadre de jeu
 
-        sf::Vertex cadreJeu[] =
+      /*  sf::Vertex cadreJeu[] =
         {
             sf::Vertex(sf::Vector2f(100, 30)),
             sf::Vertex(sf::Vector2f(100, 690)),
@@ -288,6 +289,11 @@ int main()
         window.draw(rectangle3);
         window.draw(rectangle4);
 
+        */
+
+        afficherPlateau(window,board);
+        afficherScore(window, score, font);
+        afficherProchainePiece(window, board, font);
         window.display();
 
         sf::Time t1 = sf::seconds(3.0);

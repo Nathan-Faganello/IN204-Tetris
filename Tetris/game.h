@@ -42,8 +42,8 @@ void mettrePlay(bool etat_pause) {
 }
 
 
-void finJeu(etat bool fin_jeu) {
-  fin_jeu = true;
+void finJeu(bool etat_fin_jeu) {
+  etat_fin_jeu = true;
 }
 
 
@@ -51,11 +51,11 @@ void update(sf::Time deltaT, sf::Time TempsChute, Board plateau, sf::Time dropSp
 
   TempsChute = TempsChute - deltaT;
 
-  if (TempsChute<=0) {
+  if (TempsChute<=sf::Time::Zero) {
 
     TempsChute = dropSpeed;
 
-    if (plateau.deplacerPieceBas(plateau.piece_courante)) {
+    if (plateau.deplacerPieceBas(plateau.getPieceCourante())) {
 
       plateau.setPieceCourante();
       plateau.setPieceSuivante();
@@ -67,7 +67,7 @@ void update(sf::Time deltaT, sf::Time TempsChute, Board plateau, sf::Time dropSp
 }
 
 
-void afficherScore(sf::RenderWindow &window, int score){
+void afficherScore(sf::RenderWindow &window, int score, sf::Font font){
 
 
   sf::Vertex cadreScore[] =
@@ -110,7 +110,7 @@ void afficherScore(sf::RenderWindow &window, int score){
 
 }
 
-void afficherProchainePiece(sf::RenderWindow &window, Board board){
+void afficherProchainePiece(sf::RenderWindow &window, Board board, sf::Font font){
 
 
   sf::Vertex cadreNouvPiece[] =
@@ -236,7 +236,7 @@ void afficherPlateau(sf::RenderWindow &window, Board board){
 
   for(int i=0; i<hauteur; i++){
     for(int j=0; j<largeur; j++){
-      switch ((Couleur)board[i][j]){
+      switch ((Couleur)(board.plateau[i][j])){
         case Couleur::CYAN:
           colorPiece=sf::Color::Cyan;
           break;
