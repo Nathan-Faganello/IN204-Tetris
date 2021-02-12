@@ -29,7 +29,12 @@ int main()
 
     board.setPieceSuivante();
     board.setPieceCourante();
-
+    sf::Font font;
+    if (!font.loadFromFile("./External/Font/arial.ttf"))
+  //find this file in the "pong" example in the SFML examples folder
+    {
+      std::cout << "Error loading font\n" ;
+    }
     while (window.isOpen())
     {
 
@@ -54,12 +59,7 @@ int main()
 						}
 
         }
-				sf::Font font;
-				if (!font.loadFromFile("./External/Font/arial.ttf"))
-	    //find this file in the "pong" example in the SFML examples folder
-				{
-    			std::cout << "Error loading font\n" ;
-				}
+
 
 				if (statut==0){ //affichage texte bienvenue
 					sf::Text text;
@@ -305,8 +305,13 @@ int main()
       else if(statut==3){
         window.clear();
 
-
+        afficherPlateau(window,board);
+        afficherScore(window, score, font);
+        afficherProchainePiece(window, board, font);
         window.display();
+        sf::Time t1 = sf::seconds(3.0);
+        sf::sleep(t1);
+        statut
       }
 
 
