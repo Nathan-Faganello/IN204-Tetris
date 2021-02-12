@@ -127,73 +127,35 @@ int main()
 
         //affichage cadre de jeu
 
-        sf::Vertex lineVert1[] =
+        sf::Vertex cadreJeu[] =
         {
             sf::Vertex(sf::Vector2f(100, 30)),
-            sf::Vertex(sf::Vector2f(100, 690))
-        };
-
-        window.draw(lineVert1, 2, sf::Lines);
-
-        sf::Vertex lineVert2[] =
-        {
-            sf::Vertex(sf::Vector2f(400, 30)),
-            sf::Vertex(sf::Vector2f(400, 690))
-        };
-
-        window.draw(lineVert2, 2, sf::Lines);
-
-        sf::Vertex lineHori1[] =
-        {
-            sf::Vertex(sf::Vector2f(100, 30)),
-            sf::Vertex(sf::Vector2f(400, 30))
-        };
-
-        window.draw(lineHori1, 2, sf::Lines);
-
-        sf::Vertex lineHori2[] =
-        {
             sf::Vertex(sf::Vector2f(100, 690)),
-            sf::Vertex(sf::Vector2f(400, 690))
+            sf::Vertex(sf::Vector2f(400, 690)),
+            sf::Vertex(sf::Vector2f(400, 30)),
+            sf::Vertex(sf::Vector2f(100, 30))
         };
 
-        window.draw(lineHori2, 2, sf::Lines);
+        window.draw(cadreJeu, 5, sf::LinesStrip);
+
+
 
         //affichage score
 
 
 
-        sf::Vertex scLineVert1[] =
+        sf::Vertex cadreScore[] =
         {
             sf::Vertex(sf::Vector2f(500, 400)),
-            sf::Vertex(sf::Vector2f(500, 500))
-        };
-
-        window.draw(scLineVert1, 2, sf::Lines);
-
-        sf::Vertex scLineVert2[] =
-        {
-            sf::Vertex(sf::Vector2f(800, 400)),
-            sf::Vertex(sf::Vector2f(800, 500))
-        };
-
-        window.draw(scLineVert2, 2, sf::Lines);
-
-        sf::Vertex scLineHori1[] =
-        {
-            sf::Vertex(sf::Vector2f(500, 400)),
-            sf::Vertex(sf::Vector2f(800, 400))
-        };
-
-        window.draw(scLineHori1, 2, sf::Lines);
-
-        sf::Vertex scLineHori2[] =
-        {
             sf::Vertex(sf::Vector2f(500, 500)),
-            sf::Vertex(sf::Vector2f(800, 500))
+            sf::Vertex(sf::Vector2f(800, 500)),
+            sf::Vertex(sf::Vector2f(800, 400)),
+            sf::Vertex(sf::Vector2f(500, 400))
         };
 
-        window.draw(scLineHori2, 2, sf::Lines);
+        window.draw(cadreScore, 5, sf::LinesStrip);
+
+
 
         sf::Text txtScore;
         txtScore.setString("Score :");
@@ -223,37 +185,17 @@ int main()
 
         //Cadre affichage nouvelle pièce
 
-        sf::Vertex npLineVert1[] =
+        sf::Vertex cadreNouvPiece[] =
         {
             sf::Vertex(sf::Vector2f(500, 100)),
-            sf::Vertex(sf::Vector2f(500, 300))
-        };
-
-        window.draw(npLineVert1, 2, sf::Lines);
-
-        sf::Vertex npLineVert2[] =
-        {
-            sf::Vertex(sf::Vector2f(800, 100)),
-            sf::Vertex(sf::Vector2f(800, 300))
-        };
-
-        window.draw(npLineVert2, 2, sf::Lines);
-
-        sf::Vertex npLineHori1[] =
-        {
-            sf::Vertex(sf::Vector2f(500, 100)),
-            sf::Vertex(sf::Vector2f(800, 100))
-        };
-
-        window.draw(npLineHori1, 2, sf::Lines);
-
-        sf::Vertex npLineHori2[] =
-        {
             sf::Vertex(sf::Vector2f(500, 300)),
-            sf::Vertex(sf::Vector2f(800, 300))
+            sf::Vertex(sf::Vector2f(800, 300)),
+            sf::Vertex(sf::Vector2f(800, 100)),
+            sf::Vertex(sf::Vector2f(500, 100))
         };
 
-        window.draw(npLineHori2, 2, sf::Lines);
+        window.draw(cadreNouvPiece, 5, sf::LinesStrip);
+
 
         sf::Text nouvellePiece;
         nouvellePiece.setString("Piece suivante :");
@@ -357,7 +299,7 @@ int main()
       else if(statut==3){
         window.clear();
 
-        
+
         window.display();
       }
 
