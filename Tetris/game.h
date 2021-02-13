@@ -47,7 +47,7 @@ void finJeu(bool etat_fin_jeu) {
 }
 
 
-void update(sf::Time deltaT, sf::Time TempsChute, Board plateau, sf::Time dropSpeed) {
+void update(sf::Time deltaT, sf::Time &TempsChute, Board plateau, sf::Time dropSpeed) {
 
   TempsChute = TempsChute - deltaT;
 
@@ -55,7 +55,7 @@ void update(sf::Time deltaT, sf::Time TempsChute, Board plateau, sf::Time dropSp
 
     TempsChute = dropSpeed;
 
-    if (plateau.deplacerPieceBas(plateau.getPieceCourante())) {
+    if (plateau.deplacerPieceBas()) {
 
       plateau.setPieceCourante();
       plateau.setPieceSuivante();

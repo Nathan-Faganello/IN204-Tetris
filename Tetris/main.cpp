@@ -31,7 +31,12 @@ int main()
 		int niveau=0;
 		int statut=0;
     int score=0;
+    int NbLignes=0;
     int statutPause=0;
+
+    sf::Time dropSpeed = sf::seconds(0);
+    sf::Time tempsChute = dropSpeed;
+    sf::Time deltaT;
 
 
     Board board;
@@ -142,9 +147,39 @@ int main()
       else if(statut==3){
         window.clear();
 
-        afficherPlateau(window,board);
-        afficherScore(window, score, font);
-        afficherProchainePiece(window, board, font);
+        board.setPieceCourante();
+        board.setPieceSuivante();
+        board.AfficherPiece();
+        TempsChute=dropSpeed;
+
+        while(TempsChute>0) {
+
+          sf::Clock clock;
+          /*Si entrée clavier droite*/ {
+            board.deplacerPieceDroite();
+            sf::Time deltaT = clock.getElapsedTime();
+            update(deltaT, TempsChute, board, dropSpeed);
+            clock.restart;
+          }
+          /*else Si entrée clavier gauche*/ {
+            board.deplacerPieceGauche();
+            sf::Time deltaT = clock.getElapsedTime();
+            update(deltaT, TempsChute, board, dropSpeed);
+            clock.restart;
+          }
+          /*else Si entrée clavier bas*/ {
+            board.TomberPiece();
+            sf::Time deltaT = clock.getElapsedTime();
+            update(deltaT, TempsChute, board, dropSpeed);
+            clock.restart;
+          } 
+          window.clear();
+          window.display();
+        }
+
+        board.deplacerPieceBas();
+        NbLignes=plateau.ligne_full();
+        score = calcul_score(score, niveau, NbLignes);
         window.display();
 
       }
