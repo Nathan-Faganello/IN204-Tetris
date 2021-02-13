@@ -272,6 +272,37 @@ void afficherPlateau(sf::RenderWindow &window, Board board){
   }
 }
 
-void afficherPause(sf::RenderWindow &window){}
+void afficherPause(sf::RenderWindow &window,sf::Font font, int statutPause){
+
+
+  sf::Text messagePause;
+  messagePause.setFont(font);
+  messagePause.setCharacterSize(30);
+  messagePause.setFillColor(sf::Color::White);
+  messagePause.setString("Jeu en pause");
+
+  sf::FloatRect textRect = messagePause.getLocalBounds();
+  messagePause.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messagePause.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-50));
+  window.draw(messagePause);
+
+
+  sf::Text messageStatutPause;
+  messageStatutPause.setFont(font);
+  messageStatutPause.setCharacterSize(30);
+  messageStatutPause.setFillColor(sf::Color::White);
+
+  if(statutPause==0){
+    messageStatutPause.setString("Reprendre");
+  }
+  else{
+    messageStatutPause.setString("Quitter la partie");
+  }
+
+  textRect = messageStatutPause.getLocalBounds();
+  messageStatutPause.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageStatutPause.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+50));
+  window.draw(messageStatutPause);
+}
 
 #endif // !GAME_H
