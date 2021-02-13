@@ -67,6 +67,71 @@ void update(sf::Time deltaT, sf::Time TempsChute, Board plateau, sf::Time dropSp
 }
 
 
+
+
+
+void afficherIntro(sf::RenderWindow &window, sf::Font font){
+
+  sf::Text line1;
+  line1.setString("Bienvenue dans notre Tetris");
+  line1.setFont(font);
+  line1.setCharacterSize(50);
+  line1.setFillColor(sf::Color::White);
+
+
+
+  sf::FloatRect textRect = line1.getLocalBounds();
+  line1.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line1.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-200));
+  window.draw(line1);
+
+  sf::Text line2;
+  line2.setString("Pour parcourir les differents menus, utilisez les fleches directionnelles.");
+  line2.setFont(font);
+  line2.setCharacterSize(30);
+  line2.setFillColor(sf::Color::White);
+
+  textRect = line2.getLocalBounds();
+  line2.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line2.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-60));
+  window.draw(line2);
+
+
+  sf::Text line3;
+  line3.setString("Appuyez sur Entree pour valider votre choix.");
+  line3.setFont(font);
+  line3.setCharacterSize(30);
+  line3.setFillColor(sf::Color::White);
+
+  textRect = line3.getLocalBounds();
+  line3.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line3.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-20));
+  window.draw(line3);
+
+  sf::Text line4;
+  line4.setString("Appuyez sur Echap pour revenir en arriere ou mettre le jeu en pause.");
+  line4.setFont(font);
+  line4.setCharacterSize(30);
+  line4.setFillColor(sf::Color::White);
+
+  textRect = line4.getLocalBounds();
+  line4.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line4.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+20));
+  window.draw(line4);
+
+  sf::Text line5;
+  line5.setString("Appuyez sur Entree pour continuer");
+  line5.setFont(font);
+  line5.setCharacterSize(30);
+  line5.setFillColor(sf::Color::White);
+
+  textRect = line5.getLocalBounds();
+  line5.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line5.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+80));
+  window.draw(line5);
+
+}
+
 void afficherScore(sf::RenderWindow &window, int score, sf::Font font){
 
 
@@ -287,22 +352,44 @@ void afficherPause(sf::RenderWindow &window,sf::Font font, int statutPause){
   window.draw(messagePause);
 
 
-  sf::Text messageStatutPause;
-  messageStatutPause.setFont(font);
-  messageStatutPause.setCharacterSize(30);
-  messageStatutPause.setFillColor(sf::Color::White);
+  sf::Text messageStatutPause1;
+  messageStatutPause1.setFont(font);
+  messageStatutPause1.setCharacterSize(30);
+  messageStatutPause1.setFillColor(sf::Color::White);
+  messageStatutPause1.setString("Reprendre");
+
+
+
+  textRect = messageStatutPause1.getLocalBounds();
+  messageStatutPause1.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageStatutPause1.setPosition(sf::Vector2f(1080/2.0f-130,720/2.0f+50));
+
+
+  sf::Text messageStatutPause2;
+  messageStatutPause2.setFont(font);
+  messageStatutPause2.setCharacterSize(30);
+  messageStatutPause2.setFillColor(sf::Color::White);
+  messageStatutPause2.setString("Quitter la partie");
+
+
+
+  textRect = messageStatutPause2.getLocalBounds();
+  messageStatutPause2.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageStatutPause2.setPosition(sf::Vector2f(1080/2.0f+70,720/2.0f+50));
+
 
   if(statutPause==0){
-    messageStatutPause.setString("Reprendre");
+    messageStatutPause1.setOutlineThickness(1);
+    messageStatutPause1.setOutlineColor(sf::Color::White);
   }
   else{
-    messageStatutPause.setString("Quitter la partie");
+    messageStatutPause2.setOutlineThickness(1);
+    messageStatutPause2.setOutlineColor(sf::Color::White);
   }
 
-  textRect = messageStatutPause.getLocalBounds();
-  messageStatutPause.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
-  messageStatutPause.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+50));
-  window.draw(messageStatutPause);
+
+  window.draw(messageStatutPause1);
+  window.draw(messageStatutPause2);
 }
 
 #endif // !GAME_H

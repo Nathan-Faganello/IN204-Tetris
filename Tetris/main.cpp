@@ -47,7 +47,14 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-						if (statut==1){
+            if (statut==0){
+              if (event.type == sf::Event::KeyPressed){
+                if (event.key.code == sf::Keyboard::Enter){
+                  statut++;
+                }
+              }
+            }
+						else if (statut==1){
 							if (event.type == sf::Event::KeyPressed){
 								if (event.key.code == sf::Keyboard::Right){
 									niveau=(niveau+1)%16;
@@ -80,23 +87,10 @@ int main()
 
 
 				if (statut==0){ //affichage texte bienvenue
-					sf::Text text;
-					text.setString("Bienvenue dans notre Tetris");
-					text.setFont(font);
-					text.setCharacterSize(30);
-					text.setFillColor(sf::Color::White);
+          window.clear();
+          afficherIntro(window, font);
 
-					sf::FloatRect textRect = text.getLocalBounds();
-					text.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
-					text.setPosition(sf::Vector2f(1080/2.0f,720/2.0f));
-					window.draw(text);
 					window.display();
-					sf::Time t1 = sf::seconds(1.0);
-					sf::sleep(t1);
-
-
-					statut++;
-
 				}
 
 				else if(statut==1){  //choix du niveau
@@ -123,16 +117,6 @@ int main()
 					valNiveau.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
 					valNiveau.setPosition(sf::Vector2f(1080/2.0f,350));
 
-          sf::Text text;
-					text.setString("Choisir avec les fleches directionnelles gauche et droite");
-					text.setFont(font);
-					text.setCharacterSize(25);
-					text.setFillColor(sf::Color::White);
-
-					textRect = text.getLocalBounds();
-					text.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
-					text.setPosition(sf::Vector2f(1080/2.0f,420));
-					window.draw(text);
 
 					window.draw(affNiveau);
 					window.draw(valNiveau);
