@@ -87,55 +87,58 @@ class Board {
 			return true;
 		}
 
-		void AfficherPiece(Piece p) {
+		void AfficherPiece() {
 
-			int type = (int)p.getType();
-			int rotation = p.getRota();
-			int x = p.getPosX();
-			int y = p.getPosY();
+			int type = (int)piece_courante.getType();
+			int rotation = piece_courante.getRota();
+			int x = piece_courante.getPosX();
+			int y = piece_courante.getPosY();
 
 			//on associe la bonne couleur aux pi�ces
 			if (type == (int)Type::I) {
-				p.setCouleur(Couleur::CYAN);
+				piece_courante.setCouleur(Couleur::CYAN);
 			}
 			else if (type == (int)Type::O) {
-				p.setCouleur(Couleur::JAUNE);
+				piece_courante.setCouleur(Couleur::JAUNE);
 			}
 			else if (type == (int)Type::T) {
-				p.setCouleur(Couleur::ORANGE);
+				piece_courante.setCouleur(Couleur::ORANGE);
 			}
 			else if (type == (int)Type::L) {
-				p.setCouleur(Couleur::VIOLET);
+				piece_courante.setCouleur(Couleur::VIOLET);
 			}
 			else if (type == (int)Type::J) {
-				p.setCouleur(Couleur::BLEU);
+				piece_courante.setCouleur(Couleur::BLEU);
 			}
 			else if (type == (int)Type::Z) {
-				p.setCouleur(Couleur::ROUGE);
+				piece_courante.setCouleur(Couleur::ROUGE);
 			}
 			else {
-				p.setCouleur(Couleur::VERT);
+				piece_courante.setCouleur(Couleur::VERT);
 			}
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
 			memmove(ReprPiece, &(pieces[type][rotation]), 16);
 
+			//on récupère la couleur de la pièce
+			int couleurPiece = (int)piece_courante.getCouleur();
+
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
 					if (ReprPiece[i][j] == 1 || ReprPiece[i][j]==2) {
-						plateau[x + i - 2][y + j - 1] = (int)p.getCouleur();
+						plateau[x + i - 2][y + j - 1] = couleurPiece;
 					}
 				}
 			}
 		}
 
 
-		void EffacerPiece(Piece p) {
-			int type = (int)p.getType();
-			int rotation = p.getRota();
-			int x = p.getPosX();
-			int y = p.getPosY();
+		void EffacerPiece() {
+			int type = (int)piece_courante.getType();
+			int rotation = piece_courante.getRota();
+			int x = piece_courante.getPosX();
+			int y = piece_courante.getPosY();
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
@@ -152,11 +155,11 @@ class Board {
 			}
 		}
 
-		bool pieceTournable(Piece p) {
-			int type = (int)p.getType();
-			int rotation = (p.getRota()+1)%4;
-			int x = p.getPosX();
-			int y = p.getPosY();
+		bool pieceTournable() {
+			int type = (int)piece_courante.getType();
+			int rotation = (piece_courante.getRota()+1)%4;
+			int x = piece_courante.getPosX();
+			int y = piece_courante.getPosY();
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
@@ -181,22 +184,22 @@ class Board {
 			return true;
 		}
 
-		void tournerPiece(Piece p) {
+		void tournerPiece() {
 			//on verifie d'abord que l'on peut tourner la pi�ce
-			if (pieceTournable(p)) {
+			if (pieceTournable()) {
 				//Si oui, on efface la pi�ce dans sa position pr�c�dente et on la tourne
-				int newRota = ((p.getRota()) + 1) % 4;
-				p.setRota(newRota);;
+				int newRota = ((piece_courante.getRota()) + 1) % 4;
+				piece_courante.setRota(newRota);;
 			}
 		}
 
-		bool pieceDeplacableBas(Piece p) {
-			int type = (int)p.getType();
-			int rotation = p.getRota();
-			int x = p.getPosX();
-			int y = p.getPosY()+1;
+		bool pieceDeplacableBas() {
+			int type = (int)piece_courante.getType();
+			int rotation = piece_courante.getRota();
+			int x = piece_courante.getPosX();
+			int y = piece_courante.getPosY()+1;
 
-			EffacerPiece(p);
+			EffacerPiece();
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
@@ -221,13 +224,13 @@ class Board {
 			return true;
 		}
 
-		bool pieceDeplacableGauche(Piece p) {
-			int type = (int)p.getType();
-			int rotation = p.getRota();
-			int x = p.getPosX()-1;
-			int y = p.getPosY();
+		bool pieceDeplacableGauche() {
+			int type = (int)piece_courante.getType();
+			int rotation = piece_courante.getRota();
+			int x = piece_courante.getPosX()-1;
+			int y = piece_courante.getPosY();
 
-			EffacerPiece(p);
+			EffacerPiece();
 
 
 			//On r�cup�re la matrice associ�e � la pi�ce
@@ -253,13 +256,13 @@ class Board {
 			return true;
 		}
 
-		bool pieceDeplacableDroite(Piece p) {
-			int type = (int)p.getType();
-			int rotation = p.getRota();
-			int x = p.getPosX()+1;
-			int y = p.getPosY();
+		bool pieceDeplacableDroite() {
+			int type = (int)piece_courante.getType();
+			int rotation = piece_courante.getRota();
+			int x = piece_courante.getPosX()+1;
+			int y = piece_courante.getPosY();
 
-			EffacerPiece(p);
+			EffacerPiece();
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
@@ -282,19 +285,19 @@ class Board {
 			return true;
 		}
 
-		bool deplacerPieceBas(Piece p) {
+		bool deplacerPieceBas() {
 			//on verifie d'abord que l'on peut d�placer la pi�ce
-			if (pieceDeplacableBas(p)) {
+			if (pieceDeplacableBas()) {
 				//Si oui, on efface la pi�ce dans sa position pr�c�dente et on la d�place
-				int newY = ((p.getPosY()) + 1);
-				p.setPosY(newY);
-				AfficherPiece(p);
+				int newY = ((piece_courante.getPosY()) + 1);
+				piece_courante.setPosY(newY);
+				AfficherPiece();
 
 				return false;
 			}
 
 			else {
-				AfficherPiece(p);
+				AfficherPiece();
 
 				return true;
 			}
@@ -302,32 +305,32 @@ class Board {
 
 		}
 
-		void deplacerPieceGauche(Piece p) {
+		void deplacerPieceGauche() {
 			//on verifie d'abord que l'on peut d�placer la pi�ce
-			if (pieceDeplacableGauche(p)) {
+			if (pieceDeplacableGauche()) {
 				//Si oui, on efface la pi�ce dans sa position pr�c�dente et on la d�place
-				int newX = ((p.getPosX()) - 1);
-				p.setPosX(newX);
+				int newX = ((piece_courante.getPosX()) - 1);
+				piece_courante.setPosX(newX);
 			}
 
-			AfficherPiece(p);
+			AfficherPiece();
 		}
 
-		void deplacerPieceDroite(Piece p) {
+		void deplacerPieceDroite() {
 			//on verifie d'abord que l'on peut d�placer la pi�ce
-			if (pieceDeplacableDroite(p)) {
+			if (pieceDeplacableDroite()) {
 				//Si oui, on efface la pi�ce dans sa position pr�c�dente et on la d�place
-				int newX = ((p.getPosX()) + 1);
-				p.setPosX(newX);
+				int newX = ((piece_courante.getPosX()) + 1);
+				piece_courante.setPosX(newX);
 			}
 
-			AfficherPiece(p);
+			AfficherPiece();
 		}
 
 
-		void TomberPiece(Piece p) {
-			while (pieceDeplacableBas(p) ){
-				deplacerPieceBas(p);
+		void TomberPiece() {
+			while (pieceDeplacableBas() ){
+				deplacerPieceBas();
 			}
 		}
 
