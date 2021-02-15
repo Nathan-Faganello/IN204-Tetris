@@ -31,7 +31,12 @@ int main()
 		int niveau=0;
 		int statut=0;
     int score=0;
+    int NbLignes=0;
     int statutPause=0;
+
+    sf::Time dropSpeed = sf::seconds(0);
+    sf::Time tempsChute = dropSpeed;
+    sf::Time deltaT;
 
 
     Board board;
@@ -74,6 +79,7 @@ int main()
                   statut=100;
                   statutPause=0;
                 }
+
               }
             }
             else if(statut==100){
@@ -141,6 +147,40 @@ int main()
 
       else if(statut==3){
         window.clear();
+
+        board.setPieceCourante();
+        board.setPieceSuivante();
+        board.AfficherPiece(board.getPieceCourante());
+        tempsChute=dropSpeed;
+
+        while(tempsChute>sf::Time::Zero) {
+
+          sf::Clock clock;
+          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+            board.deplacerPieceDroite(board.getPieceCourante());
+            sf::Time deltaT = clock.getElapsedTime();
+            update(deltaT, tempsChute, board, dropSpeed);
+            clock.restart();
+          }
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+            board.deplacerPieceGauche(board.getPieceCourante());
+            sf::Time deltaT = clock.getElapsedTime();
+            update(deltaT, tempsChute, board, dropSpeed);
+            clock.restart();
+          }
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            board.TomberPiece(board.getPieceCourante());
+            sf::Time deltaT = clock.getElapsedTime();
+            update(deltaT, tempsChute, board, dropSpeed);
+            clock.restart();
+          }
+        }
+
+        board.deplacerPieceBas(board.getPieceCourante());
+        NbLignes=board.ligne_full();
+        if(NbLignes!=0){
+          score = calculScore(score, niveau, NbLignes);
+        }
 
         afficherPlateau(window,board);
         afficherScore(window, score, font);

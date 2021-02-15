@@ -47,7 +47,7 @@ void finJeu(bool etat_fin_jeu) {
 }
 
 
-void update(sf::Time deltaT, sf::Time TempsChute, Board plateau, sf::Time dropSpeed) {
+void update(sf::Time deltaT, sf::Time &TempsChute, Board &plateau, sf::Time dropSpeed) {
 
   TempsChute = TempsChute - deltaT;
 
