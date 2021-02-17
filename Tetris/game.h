@@ -328,6 +328,9 @@ void afficherPlateau(sf::RenderWindow &window, Board board){
         case Couleur::VERT:
           colorPiece=sf::Color::Green;
           break;
+        case Couleur::LIBRE:
+          colorPiece=sf::Color::Black;
+          break;
       }
 
     rectangle.setFillColor(colorPiece);

@@ -13,7 +13,7 @@ const int hauteur = 22;
 const int largeur = 10;
 
 //point d'apparition de la pi�ce (on prend pour r�f�rence le point de rotation de la pi�ce)
-const int spawn_X = 1;
+const int spawn_X = 0;
 const int spawn_Y = largeur/2;
 
 
@@ -38,7 +38,7 @@ class Board {
 					plateau[i][j] = (int)Couleur::LIBRE;
 				}
 			}
-		};
+		}
 
 		void clearPlateau() {
 			//on remet toutes les cases sur LIBRE
@@ -119,7 +119,7 @@ class Board {
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
-			memmove(ReprPiece, &(pieces[type][rotation]), 16);
+			memmove(ReprPiece, &(pieces[type][rotation]), 16*sizeof(int));
 
 			//on récupère la couleur de la pièce
 			int couleurPiece = (int)piece_courante.getCouleur();
@@ -127,7 +127,7 @@ class Board {
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
 					if (ReprPiece[i][j] == 1 || ReprPiece[i][j]==2) {
-						plateau[x + i - 2][y + j - 1] = couleurPiece;
+						plateau[x + i - 1][y + j - 2] = couleurPiece;
 					}
 				}
 			}
@@ -142,14 +142,14 @@ class Board {
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
-			memmove(ReprPiece, &(pieces[type][rotation]), 16);
+			memmove(ReprPiece, &(pieces[type][rotation]), 16*sizeof(int));
 
 
 
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
 					if (ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) {
-						plateau[x + i - 2][y + j - 1] = (int)Couleur::LIBRE;
+						plateau[x + i - 1][y + j - 2] = (int)Couleur::LIBRE;
 					}
 				}
 			}
@@ -163,20 +163,21 @@ class Board {
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
-			memmove(ReprPiece, &(pieces[type][rotation]),16);
+			memmove(ReprPiece, &(pieces[type][rotation]),16*sizeof(int));
 
+			EffacerPiece();
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
 
 					//on teste d'abord que la piece ne sortira pas du plateau
-					if (x+i-2 >= largeur || x+i-2<2 || y+j-1 >= hauteur || y+j-1 < 0) {
+					if (x+i-1 >= hauteur || x+i-1<0 || y+j-1 >= largeur || y+j-1 < 0) {
 						if (ReprPiece[i][j]==1 || ReprPiece[i][j]==2){
 							return false;
 						}
 					}
 
 					//si elle ne sort pas du plateau, on teste qu'elle n'entre pas en collision avec d'autres pi�ces d�j� pos�es
-					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x+i-2][y+j-1] != (int)Couleur::LIBRE){
+					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x+i-1][y+j-2] != (int)Couleur::LIBRE){
 						return false;
 					}
 				}
@@ -191,63 +192,67 @@ class Board {
 				int newRota = ((piece_courante.getRota()) + 1) % 4;
 				piece_courante.setRota(newRota);;
 			}
+			AfficherPiece();
 		}
 
 		bool pieceDeplacableBas() {
 			int type = (int)piece_courante.getType();
 			int rotation = piece_courante.getRota();
-			int x = piece_courante.getPosX();
-			int y = piece_courante.getPosY()+1;
+			int x = piece_courante.getPosX()+1;
+			int y = piece_courante.getPosY();
 
 			EffacerPiece();
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
-			memmove(ReprPiece, &(pieces[type][rotation]),16);
+			memmove(ReprPiece, &(pieces[type][rotation]),16*sizeof(int));
 
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
 
 					//on teste d'abord que la piece ne sortira pas du plateau
-					if (y+j-1 >= hauteur) {
+					if (x+i-1 >= hauteur) {
 						if (ReprPiece[i][j]==1 || ReprPiece[i][j]==2){
+							AfficherPiece();
 							return false;
 						}
 					}
 
 					//si elle ne sort pas du plateau, on teste qu'elle n'entre pas en collision avec d'autres pi�ces d�j� pos�es
-					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x+i-2][y+j-1] != (int)Couleur::LIBRE){
+					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x+i-1][y+j-2] != (int)Couleur::LIBRE){
+						AfficherPiece();
 						return false;
 					}
 				}
 			}
+			AfficherPiece();
 			return true;
 		}
 
 		bool pieceDeplacableGauche() {
 			int type = (int)piece_courante.getType();
 			int rotation = piece_courante.getRota();
-			int x = piece_courante.getPosX()-1;
-			int y = piece_courante.getPosY();
+			int x = piece_courante.getPosX();
+			int y = piece_courante.getPosY()-1;
 
 			EffacerPiece();
 
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
-			memmove(ReprPiece, &(pieces[type][rotation]),16);
+			memmove(ReprPiece, &(pieces[type][rotation]),16*sizeof(int));
 
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
 
 					//on teste d'abord que la piece ne sortira pas du plateau
-					if (x+i-2 < 0) {
+					if (y+j-2 < 0) {
 						if (ReprPiece[i][j]==1 || ReprPiece[i][j]==2){
 							return false;
 						}
 					}
 
-					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] != (int)Couleur::LIBRE) {
+					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 1][y + j - 2] != (int)Couleur::LIBRE) {
 						return false;
 					}
 				}
@@ -259,29 +264,31 @@ class Board {
 		bool pieceDeplacableDroite() {
 			int type = (int)piece_courante.getType();
 			int rotation = piece_courante.getRota();
-			int x = piece_courante.getPosX()+1;
-			int y = piece_courante.getPosY();
+			int x = piece_courante.getPosX();
+			int y = piece_courante.getPosY()+1;
 
 			EffacerPiece();
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
-			memmove(ReprPiece, &(pieces[type][rotation]),16);
+			memmove(ReprPiece, &(pieces[type][rotation]),16*sizeof(int));
 
 			for (int i = 0; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
 
-					if (x+i-2 >= largeur) {
+					if (y+j-2 >= largeur) {
 						if (ReprPiece[i][j]==1 || ReprPiece[i][j]==2){
 							return false;
 						}
 					}
 
-					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] != (int)Couleur::LIBRE) {
+					else if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 1][y + j - 2] != (int)Couleur::LIBRE) {
+
 						return false;
 					}
 				}
 			}
+
 			return true;
 		}
 
@@ -289,15 +296,15 @@ class Board {
 			//on verifie d'abord que l'on peut d�placer la pi�ce
 			if (pieceDeplacableBas()) {
 				//Si oui, on efface la pi�ce dans sa position pr�c�dente et on la d�place
-				int newY = ((piece_courante.getPosY()) + 1);
-				piece_courante.setPosY(newY);
+				EffacerPiece();
+				int newX = ((piece_courante.getPosX()) + 1);
+				piece_courante.setPosX(newX);
 				AfficherPiece();
 
 				return false;
 			}
 
 			else {
-				AfficherPiece();
 
 				return true;
 			}
@@ -309,8 +316,8 @@ class Board {
 			//on verifie d'abord que l'on peut d�placer la pi�ce
 			if (pieceDeplacableGauche()) {
 				//Si oui, on efface la pi�ce dans sa position pr�c�dente et on la d�place
-				int newX = ((piece_courante.getPosX()) - 1);
-				piece_courante.setPosX(newX);
+				int newY = ((piece_courante.getPosY()) - 1);
+				piece_courante.setPosY(newY);
 			}
 
 			AfficherPiece();
@@ -320,8 +327,8 @@ class Board {
 			//on verifie d'abord que l'on peut d�placer la pi�ce
 			if (pieceDeplacableDroite()) {
 				//Si oui, on efface la pi�ce dans sa position pr�c�dente et on la d�place
-				int newX = ((piece_courante.getPosX()) + 1);
-				piece_courante.setPosX(newX);
+				int newY = ((piece_courante.getPosY()) + 1);
+				piece_courante.setPosY(newY);
 			}
 
 			AfficherPiece();
