@@ -151,23 +151,15 @@ int main()
       else if(statut==3){
 
 
-        if (!board.pieceDeplacableBas()){
-
-          board.setPieceCourante();
-          board.setPieceSuivante();
-          board.AfficherPiece();
-          sf::Time t1 = sf::seconds(1);
-          sf::sleep(t1);
-        }
 
         tempsChute=dropSpeed;
-        for(int i=0; i<hauteur; i++){
+        /*for(int i=0; i<hauteur; i++){
           for(int j=0; j<largeur; j++){
             std::cout<<" "<<board.plateau[i][j];
           }
           std::cout<<std::endl;
         }
-        std::cout<<std::endl;
+        std::cout<<std::endl; */
         //sf::Time t1 = sf::seconds(0);
         //sf::sleep(t1); *
         sf::Clock clock;
@@ -190,6 +182,7 @@ int main()
             board.tournerPiece();
 
           }
+
           sf::Time deltaT = clock.getElapsedTime();
           tempsChute-=deltaT;
           clock.restart();
@@ -197,20 +190,40 @@ int main()
           afficherPlateau(window,board);
           afficherScore(window, score, font);
           afficherProchainePiece(window, board, font);
+
           window.display();
+          sf::Time t2 = sf::seconds(0.05);
+          sf::sleep(t2);
 
         } while(tempsChute>sf::Time::Zero);
 
-        board.deplacerPieceBas();
-        NbLignes=board.ligne_full();
-        if(NbLignes!=0){
-          score = calculScore(score, niveau, NbLignes);
+        bool changement=board.deplacerPieceBas();
+
+
+        if(changement){
+          NbLignes=board.ligne_full();
+          if(NbLignes!=0){
+            score = calculScore(score, niveau, NbLignes);
+            window.clear();
+            afficherPlateau(window,board);
+            afficherScore(window, score, font);
+            afficherProchainePiece(window, board, font);
+            window.display();
+          }
+          board.setPieceCourante();
+          board.setPieceSuivante();
+          board.AfficherPiece();
+          sf::Time t1 = sf::seconds(1);
+          sf::sleep(t1);
+
         }
-        window.clear();
-        afficherPlateau(window,board);
-        afficherScore(window, score, font);
-        afficherProchainePiece(window, board, font);
-        window.display();
+        else {
+          window.clear();
+          afficherPlateau(window,board);
+          afficherScore(window, score, font);
+          afficherProchainePiece(window, board, font);
+          window.display();
+        }
 
       }
       else if(statut==100){
