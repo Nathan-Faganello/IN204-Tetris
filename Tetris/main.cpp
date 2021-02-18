@@ -34,8 +34,8 @@ int main()
     int NbLignes=0;
     int statutPause=0;
 
-    sf::Time dropSpeed = sf::seconds(1);
-    sf::Time tempsChute = dropSpeed;
+    sf::Time dropSpeed;
+    sf::Time tempsChute;
     sf::Time deltaT;
 
 
@@ -69,6 +69,8 @@ int main()
 									niveau=niveau-1;
 								}
                 else if (event.key.code == sf::Keyboard::Enter){
+                  dropSpeed=sf::seconds(1.5)-(sf::seconds(niveau*1.499/15));
+                  tempsChute=dropSpeed;
                   statut++;
                 }
 							}
@@ -86,10 +88,29 @@ int main()
               if (event.type == sf::Event::KeyPressed){
 								if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Left){
                   statutPause=(statutPause+1)%2;
+                }
+                else if(event.key.code == sf::Keyboard::Enter){
+                  if (statutPause==0){
+                    statut=101;
+                  }
+                  else{
+                    board.clearPlateau();
+                    statut=1;
+                    score=0;
                   }
                 }
               }
             }
+            else if(statut==4){
+              if (event.type == sf::Event::KeyPressed){
+                if (event.key.code == sf::Keyboard::Enter){
+                  statut=1;
+                  board.clearPlateau();
+                  score=0;
+                }
+              }
+            }
+          }
 
 
 				if (statut==0){ //affichage texte bienvenue
@@ -163,25 +184,55 @@ int main()
         //sf::Time t1 = sf::seconds(0);
         //sf::sleep(t1); *
         sf::Clock clock;
+        sf::Clock timerUp;
+        sf::Clock timerDown;
+        bool finChute;
+        sf::Time coolDown=sf::seconds(0.35f);
+        bool firstTime=true;
         do {
           window.clear();
 
           if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+
             board.deplacerPieceDroite();
 
           }
           else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+
             board.deplacerPieceGauche();
 
           }
-          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            board.TomberPiece();
 
-          }
           else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            board.tournerPiece();
-
+            if(firstTime){
+              board.tournerPiece();
+              firstTime=false;
+            }
+            else{
+              if(timerUp.getElapsedTime()>=coolDown){
+                board.tournerPiece();
+                timerUp.restart();
+              }
+            }
           }
+
+          else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            if(timerUp.getElapsedTime()>=sf::seconds(0.3)){
+              finChute=board.deplacerPieceBas();
+              timerDown.restart();
+              window.clear();
+              afficherPlateau(window,board);
+              afficherScore(window, score, font);
+              afficherProchainePiece(window, board, font);
+
+              window.display();
+              if (finChute){
+                break;
+              }
+
+            }
+          }
+
 
           sf::Time deltaT = clock.getElapsedTime();
           tempsChute-=deltaT;
@@ -192,8 +243,7 @@ int main()
           afficherProchainePiece(window, board, font);
 
           window.display();
-          sf::Time t2 = sf::seconds(0.05);
-          sf::sleep(t2);
+
 
         } while(tempsChute>sf::Time::Zero);
 
@@ -212,10 +262,14 @@ int main()
           }
           board.setPieceCourante();
           board.setPieceSuivante();
-          board.AfficherPiece();
-          sf::Time t1 = sf::seconds(1);
-          sf::sleep(t1);
-
+          if(!board.pieceSpawnable(board.getPieceCourante())){
+            statut=4;
+          }
+          else{
+            board.AfficherPiece();
+            sf::Time t1 = sf::seconds(0.4);
+            sf::sleep(t1);
+          }
         }
         else {
           window.clear();
@@ -226,11 +280,33 @@ int main()
         }
 
       }
+      else if(statut==4){
+        window.clear();
+        afficherFin(window, font, score);
+        window.display();
+      }
       else if(statut==100){
         window.clear();
         afficherPause(window, font, statutPause);
         window.display();
 
+      }
+
+      else if(statut==101){//petit temps de pause avant reprise du jeu après la pause où on affiche l'état du jeu avant reprise
+        window.clear();
+
+
+
+        afficherPlateau(window,board);
+        afficherScore(window, score, font);
+        afficherProchainePiece(window, board, font);
+        window.display();
+
+
+
+        sf::Time t1 = sf::seconds(2);
+        sf::sleep(t1);
+        statut=3;
       }
 
 

@@ -75,15 +75,17 @@ class Board {
 
 			//On r�cup�re la matrice associ�e � la pi�ce
 			int ReprPiece[4][4];
-			memmove(ReprPiece, &(pieces[type][rotation]), 16);
+			memmove(ReprPiece, &(pieces[type][rotation]), 16*sizeof(int));
 
-			for (int i = 0; i <= 3; i++) {
+			for (int i = 1; i <= 3; i++) {
 				for (int j = 0; j <= 3; j++) {
-					if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 2][y + j - 1] != (int)Couleur::LIBRE) {
+					if ((ReprPiece[i][j] == 1 || ReprPiece[i][j] == 2) && plateau[x + i - 1][y + j - 2] != (int)Couleur::LIBRE) {
+
 						return false;
 					}
 				}
 			}
+			
 			return true;
 		}
 
@@ -170,7 +172,7 @@ class Board {
 				for (int j = 0; j <= 3; j++) {
 
 					//on teste d'abord que la piece ne sortira pas du plateau
-					if (x+i-1 >= hauteur || x+i-1<0 || y+j-1 >= largeur || y+j-1 < 0) {
+					if (x+i-1 >= hauteur || x+i-1<0 || y+j-2 >= largeur || y+j-2 < 0) {
 						if (ReprPiece[i][j]==1 || ReprPiece[i][j]==2){
 							return false;
 						}

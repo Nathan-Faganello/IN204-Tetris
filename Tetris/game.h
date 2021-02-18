@@ -398,4 +398,55 @@ void afficherPause(sf::RenderWindow &window,sf::Font font, int statutPause){
   window.draw(messageStatutPause2);
 }
 
+void afficherFin(sf::RenderWindow &window, sf::Font font, int score){
+
+  sf::Text line1;
+  line1.setString("Partie terminee!");
+  line1.setFont(font);
+  line1.setCharacterSize(50);
+  line1.setFillColor(sf::Color::White);
+
+
+
+  sf::FloatRect textRect = line1.getLocalBounds();
+  line1.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line1.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-200));
+  window.draw(line1);
+
+  sf::Text line2;
+  line2.setString("Votre score :");
+  line2.setFont(font);
+  line2.setCharacterSize(30);
+  line2.setFillColor(sf::Color::White);
+
+  textRect = line2.getLocalBounds();
+  line2.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line2.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-60));
+  window.draw(line2);
+
+  std::string txtValScore=std::to_string(score);
+
+  sf::Text valScore;
+  valScore.setString(txtValScore);
+  valScore.setFont(font);
+  valScore.setCharacterSize(30);
+  valScore.setFillColor(sf::Color::White);
+
+  textRect = valScore.getLocalBounds();
+  valScore.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  valScore.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-20));
+  window.draw(valScore);
+
+  sf::Text line5;
+  line5.setString("Appuyez sur Entree pour continuer");
+  line5.setFont(font);
+  line5.setCharacterSize(20);
+  line5.setFillColor(sf::Color::White);
+
+  textRect = line5.getLocalBounds();
+  line5.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line5.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+100));
+  window.draw(line5);
+}
+
 #endif // !GAME_H
