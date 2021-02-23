@@ -7,6 +7,8 @@
 #include <SFML/System/Time.hpp>
 #include"board.h"
 #include"piece.h"
+#include <string>
+#include <SFML/Network/IpAddress.hpp>
 
 
 int calculScore(int score, int niveau, int nbLignes){
@@ -448,5 +450,197 @@ void afficherFin(sf::RenderWindow &window, sf::Font font, int score){
   line5.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+100));
   window.draw(line5);
 }
+
+void afficherMulti(sf::RenderWindow &window,sf::Font font, int multijoueur){
+
+
+  sf::Text messageChoix;
+  messageChoix.setFont(font);
+  messageChoix.setCharacterSize(30);
+  messageChoix.setFillColor(sf::Color::White);
+  messageChoix.setString("Choix du mode");
+
+  sf::FloatRect textRect = messageChoix.getLocalBounds();
+  messageChoix.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageChoix.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-50));
+  window.draw(messageChoix);
+
+
+  sf::Text messageStatutChoix1;
+  messageStatutChoix1.setFont(font);
+  messageStatutChoix1.setCharacterSize(30);
+  messageStatutChoix1.setFillColor(sf::Color::White);
+  messageStatutChoix1.setString("Solo");
+
+
+
+  textRect = messageStatutChoix1.getLocalBounds();
+  messageStatutChoix1.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageStatutChoix1.setPosition(sf::Vector2f(1080/2.0f-90,720/2.0f+50));
+
+
+  sf::Text messageStatutChoix2;
+  messageStatutChoix2.setFont(font);
+  messageStatutChoix2.setCharacterSize(30);
+  messageStatutChoix2.setFillColor(sf::Color::White);
+  messageStatutChoix2.setString("2 joueurs");
+
+
+
+  textRect = messageStatutChoix2.getLocalBounds();
+  messageStatutChoix2.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageStatutChoix2.setPosition(sf::Vector2f(1080/2.0f+70,720/2.0f+50));
+
+
+  if(multijoueur==0){
+    messageStatutChoix1.setOutlineThickness(1);
+    messageStatutChoix1.setOutlineColor(sf::Color::White);
+  }
+  else{
+    messageStatutChoix2.setOutlineThickness(1);
+    messageStatutChoix2.setOutlineColor(sf::Color::White);
+  }
+
+
+  window.draw(messageStatutChoix1);
+  window.draw(messageStatutChoix2);
+}
+
+void afficherHeberge(sf::RenderWindow &window,sf::Font font, int heberge){
+
+
+  sf::Text messageChoix;
+  messageChoix.setFont(font);
+  messageChoix.setCharacterSize(30);
+  messageChoix.setFillColor(sf::Color::White);
+  messageChoix.setString("Heberger ou rejoindre ?");
+
+  sf::FloatRect textRect = messageChoix.getLocalBounds();
+  messageChoix.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageChoix.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-50));
+  window.draw(messageChoix);
+
+
+  sf::Text messageStatutChoix1;
+  messageStatutChoix1.setFont(font);
+  messageStatutChoix1.setCharacterSize(30);
+  messageStatutChoix1.setFillColor(sf::Color::White);
+  messageStatutChoix1.setString("Heberger");
+
+
+
+  textRect = messageStatutChoix1.getLocalBounds();
+  messageStatutChoix1.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageStatutChoix1.setPosition(sf::Vector2f(1080/2.0f-90,720/2.0f+50));
+
+
+  sf::Text messageStatutChoix2;
+  messageStatutChoix2.setFont(font);
+  messageStatutChoix2.setCharacterSize(30);
+  messageStatutChoix2.setFillColor(sf::Color::White);
+  messageStatutChoix2.setString("Rejoindre");
+
+
+
+  textRect = messageStatutChoix2.getLocalBounds();
+  messageStatutChoix2.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageStatutChoix2.setPosition(sf::Vector2f(1080/2.0f+70,720/2.0f+50));
+
+
+  if(heberge==0){
+    messageStatutChoix1.setOutlineThickness(1);
+    messageStatutChoix1.setOutlineColor(sf::Color::White);
+  }
+  else{
+    messageStatutChoix2.setOutlineThickness(1);
+    messageStatutChoix2.setOutlineColor(sf::Color::White);
+  }
+
+
+  window.draw(messageStatutChoix1);
+  window.draw(messageStatutChoix2);
+}
+
+void afficherIP(sf::RenderWindow &window,sf::Font font, sf::IpAddress addressIP){
+
+
+  sf::Text message;
+  message.setFont(font);
+  message.setCharacterSize(30);
+  message.setFillColor(sf::Color::White);
+  message.setString("Votre adresse IP est");
+
+  sf::FloatRect textRect = message.getLocalBounds();
+  message.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  message.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-50));
+  window.draw(message);
+
+  std::string IP = addressIP.toString();
+
+
+  sf::Text messageIP;
+  messageIP.setFont(font);
+  messageIP.setCharacterSize(30);
+  messageIP.setFillColor(sf::Color::White);
+  messageIP.setString(IP);
+
+  textRect = messageIP.getLocalBounds();
+  messageIP.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageIP.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+50));
+  window.draw(messageIP);
+
+  sf::Text line5;
+  line5.setString("Appuyez sur Entree pour continuer");
+  line5.setFont(font);
+  line5.setCharacterSize(20);
+  line5.setFillColor(sf::Color::White);
+
+  textRect = line5.getLocalBounds();
+  line5.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line5.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+180));
+  window.draw(line5);
+
+}
+
+void afficherEntreeIP(sf::RenderWindow &window,sf::Font font, std::string entreeIP){
+
+
+  sf::Text message;
+  message.setFont(font);
+  message.setCharacterSize(30);
+  message.setFillColor(sf::Color::White);
+  message.setString("Entrez l'adresse IP de l'hote : ");
+
+  sf::FloatRect textRect = message.getLocalBounds();
+  message.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  message.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-50));
+  window.draw(message);
+
+
+
+  sf::Text messageIP;
+  messageIP.setFont(font);
+  messageIP.setCharacterSize(30);
+  messageIP.setFillColor(sf::Color::White);
+  messageIP.setString(entreeIP);
+
+  textRect = messageIP.getLocalBounds();
+  messageIP.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageIP.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+50));
+  window.draw(messageIP);
+
+  sf::Text line5;
+  line5.setString("Appuyez sur Entree pour continuer");
+  line5.setFont(font);
+  line5.setCharacterSize(20);
+  line5.setFillColor(sf::Color::White);
+
+  textRect = line5.getLocalBounds();
+  line5.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line5.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+180));
+  window.draw(line5);
+
+}
+
 
 #endif // !GAME_H

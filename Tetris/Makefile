@@ -1,7 +1,7 @@
 
 CC=g++
-CFLAGS=-Wall -IExternal/SFML/include
-LDFLAGS=-LExternal/SFML/lib -lsfml-graphics -lsfml-window -lsfml-system
+CFLAGS=-Wall -IExternal/SFML/include -std=c++14
+LDFLAGS=-LExternal/SFML/lib -lsfml-graphics -lsfml-window -lsfml-network -lsfml-system -std=c++14
 EXEC=sfml-app
 
 all: $(EXEC)

@@ -10,7 +10,7 @@
 #include "piece.h"
 #include "board.h"
 #include "game.h"
-
+#include <SFML/Network/IpAddress.hpp>
 
 
 
@@ -22,7 +22,7 @@ int main()
 		window.setFramerateLimit(30);
     sf::Font font;
     if (!font.loadFromFile("./External/Font/arial.ttf"))
-  //find this file in the "pong" example in the SFML examples folder
+
     {
       std::cout << "Error loading font\n" ;
     }
@@ -33,6 +33,10 @@ int main()
     int score=0;
     int NbLignes=0;
     int statutPause=0;
+    int multijoueur=0;
+    int heberge=0;
+    std::string entreeIP;
+
 
     sf::Time dropSpeed;
     sf::Time tempsChute;
@@ -55,7 +59,23 @@ int main()
             if (statut==0){
               if (event.type == sf::Event::KeyPressed){
                 if (event.key.code == sf::Keyboard::Enter){
-                  statut++;
+                  statut--;
+                }
+              }
+            }
+            else if (statut==-1){
+              if (event.type == sf::Event::KeyPressed){
+                if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Left){
+                  multijoueur=(multijoueur+1)%2;
+                }
+                else if(event.key.code == sf::Keyboard::Enter){
+                  if (multijoueur==0){
+                    statut=1;
+                    niveau=0;
+                  }
+                  else{
+                    statut=200;
+                  }
                 }
               }
             }
@@ -72,6 +92,9 @@ int main()
                   dropSpeed=sf::seconds(1.5)-(sf::seconds(niveau*1.499/15));
                   tempsChute=dropSpeed;
                   statut++;
+                }
+                else if(event.key.code == sf::Keyboard::Escape){
+                  statut=-1;
                 }
 							}
 						}
@@ -110,7 +133,55 @@ int main()
                 }
               }
             }
+            else if(statut==200){
+              if (event.type == sf::Event::KeyPressed){
+                if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Left){
+                  heberge=(heberge+1)%2;
+                }
+                else if(event.key.code == sf::Keyboard::Enter){
+                  if (heberge==0){
+                    statut=201;
+                  }
+                  else{
+                    window.pollEvent(event);
+                    statut=202;
+                  }
+                }
+                else if(event.key.code==sf::Keyboard::Escape){
+                  statut=-1;
+                }
+              }
+            }
+            else if(statut==201){
+              if (event.type == sf::Event::KeyPressed){
+                if(event.key.code == sf::Keyboard::Enter){
+                  statut=300;
+                }
+                else if (event.key.code == sf::Keyboard::Escape){
+                  statut=200;
+                }
+              }
+            }
+            else if(statut==202){
+              if (event.type == sf::Event::TextEntered){
+                if (event.text.unicode < 128&&event.text.unicode!=13&&event.text.unicode!=8&&event.text.unicode!=27){
+                  entreeIP.push_back(static_cast<char>(event.text.unicode));
+                }
+                else if(event.text.unicode==8){
+                  entreeIP.pop_back();
+                }
+                else if(event.text.unicode==13){
+                  statut=400;
+                }
+                else if(event.text.unicode==27){
+                  entreeIP.clear();
+                  statut=200;
+                }
+              }
+            }
           }
+
+
 
 
 				if (statut==0){ //affichage texte bienvenue
@@ -119,6 +190,13 @@ int main()
 
 					window.display();
 				}
+
+
+        else if(statut==-1){
+          window.clear();
+          afficherMulti(window, font, multijoueur);
+          window.display();
+        }
 
 				else if(statut==1){  //choix du niveau
 					window.clear();
@@ -163,7 +241,7 @@ int main()
         board.setPieceCourante();
         board.setPieceSuivante();
         board.AfficherPiece();
-        sf::Time t1 = sf::seconds(3);
+        sf::Time t1 = sf::seconds(1);
         sf::sleep(t1);
         statut++;
 
@@ -309,6 +387,29 @@ int main()
         statut=3;
       }
 
+      else if(statut==200){
+        window.clear();
+        afficherHeberge(window, font, heberge);
+        window.display();
+      }
+
+      else if(statut==201){
+        window.clear();
+        sf::IpAddress addressIP = sf::IpAddress::getPublicAddress();
+        afficherIP(window, font, addressIP);
+        window.display();
+
+      }
+
+      else if(statut==202){
+        window.clear();
+        afficherEntreeIP(window, font, entreeIP);
+        window.display();
+      }
+
+      else if(statut==400){
+        std::cout<<"youpi ça marche"<<std::endl;
+      }
 
     }
 
