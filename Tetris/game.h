@@ -561,36 +561,60 @@ void afficherHeberge(sf::RenderWindow &window,sf::Font font, int heberge){
   window.draw(messageStatutChoix2);
 }
 
-void afficherIP(sf::RenderWindow &window,sf::Font font, sf::IpAddress addressIP){
-
-
-  sf::Text message;
-  message.setFont(font);
-  message.setCharacterSize(30);
-  message.setFillColor(sf::Color::White);
-  message.setString("Votre adresse IP est");
-
-  sf::FloatRect textRect = message.getLocalBounds();
-  message.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
-  message.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-50));
-  window.draw(message);
-
-  std::string IP = addressIP.toString();
+void afficherIP(sf::RenderWindow &window,sf::Font font, sf::IpAddress addressIP, unsigned short localPort){
 
 
   sf::Text messageIP;
   messageIP.setFont(font);
   messageIP.setCharacterSize(30);
   messageIP.setFillColor(sf::Color::White);
-  messageIP.setString(IP);
+  messageIP.setString("Votre adresse IP est : ");
 
-  textRect = messageIP.getLocalBounds();
+  sf::FloatRect textRect = messageIP.getLocalBounds();
   messageIP.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
-  messageIP.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+50));
+  messageIP.setPosition(sf::Vector2f(1080/2.0f-180,720/2.0f-50));
   window.draw(messageIP);
 
+  std::string IP = addressIP.toString();
+
+
+  sf::Text messageValIP;
+  messageValIP.setFont(font);
+  messageValIP.setCharacterSize(30);
+  messageValIP.setFillColor(sf::Color::White);
+  messageValIP.setString(IP);
+
+  textRect = messageValIP.getLocalBounds();
+  messageValIP.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageValIP.setPosition(sf::Vector2f(1080/2.0f+180,720/2.0f-50));
+  window.draw(messageValIP);
+
+  sf::Text messagePort;
+  messagePort.setFont(font);
+  messagePort.setCharacterSize(30);
+  messagePort.setFillColor(sf::Color::White);
+  messagePort.setString("Votre port est : ");
+
+  textRect = messagePort.getLocalBounds();
+  messagePort.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messagePort.setPosition(sf::Vector2f(1080/2.0f-80,720/2.0f+50));
+  window.draw(messagePort);
+
+  std::string Port=std::to_string(localPort);
+
+  sf::Text messageValPort;
+  messageValPort.setFont(font);
+  messageValPort.setCharacterSize(30);
+  messageValPort.setFillColor(sf::Color::White);
+  messageValPort.setString(Port);
+
+  textRect = messageValPort.getLocalBounds();
+  messageValPort.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messageValPort.setPosition(sf::Vector2f(1080/2.0f+120,720/2.0f+50));
+  window.draw(messageValPort);
+
   sf::Text line5;
-  line5.setString("Appuyez sur Entree pour continuer");
+  line5.setString("En attente du  deuxieme joueur");
   line5.setFont(font);
   line5.setCharacterSize(20);
   line5.setFillColor(sf::Color::White);
@@ -641,6 +665,348 @@ void afficherEntreeIP(sf::RenderWindow &window,sf::Font font, std::string entree
   window.draw(line5);
 
 }
+
+
+void afficherEntreePort(sf::RenderWindow &window,sf::Font font, std::string portExterneTxt){
+
+
+  sf::Text message;
+  message.setFont(font);
+  message.setCharacterSize(30);
+  message.setFillColor(sf::Color::White);
+  message.setString("Entrez le port de l'hote : ");
+
+  sf::FloatRect textRect = message.getLocalBounds();
+  message.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  message.setPosition(sf::Vector2f(1080/2.0f,720/2.0f-50));
+  window.draw(message);
+
+
+  sf::Text messagePort;
+  messagePort.setFont(font);
+  messagePort.setCharacterSize(30);
+  messagePort.setFillColor(sf::Color::White);
+  messagePort.setString(portExterneTxt);
+
+  textRect = messagePort.getLocalBounds();
+  messagePort.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  messagePort.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+50));
+  window.draw(messagePort);
+
+  sf::Text line5;
+  line5.setString("Appuyez sur Entree pour continuer");
+  line5.setFont(font);
+  line5.setCharacterSize(20);
+  line5.setFillColor(sf::Color::White);
+
+  textRect = line5.getLocalBounds();
+  line5.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line5.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+180));
+  window.draw(line5);
+
+}
+
+
+void afficherErreurConnection(sf::RenderWindow &window,sf::Font font){
+
+
+  sf::Text message;
+  message.setFont(font);
+  message.setCharacterSize(30);
+  message.setFillColor(sf::Color::White);
+  message.setString("Impossible d'etablir la connection entre les joueurs.");
+
+  sf::FloatRect textRect = message.getLocalBounds();
+  message.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  message.setPosition(sf::Vector2f(1080/2.0f,720/2.0f));
+  window.draw(message);
+
+}
+
+
+void afficherErreurReseau(sf::RenderWindow &window,sf::Font font){
+
+
+  sf::Text message;
+  message.setFont(font);
+  message.setCharacterSize(30);
+  message.setFillColor(sf::Color::White);
+  message.setString("Erreur lors de l'ouverture d'un port, mode multijoueur non fonctionnel.");
+
+  sf::FloatRect textRect = message.getLocalBounds();
+  message.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  message.setPosition(sf::Vector2f(1080/2.0f,720/2.0f));
+  window.draw(message);
+
+}
+
+
+
+void afficherScoreAllie(sf::RenderWindow &window, sf::Font font, int allyScore){
+
+  sf::Vertex cadreScore[] =
+  {
+      sf::Vertex(sf::Vector2f(500, 400)),
+      sf::Vertex(sf::Vector2f(500, 480)),
+      sf::Vertex(sf::Vector2f(700, 480)),
+      sf::Vertex(sf::Vector2f(700, 400)),
+      sf::Vertex(sf::Vector2f(500, 400))
+  };
+
+  window.draw(cadreScore, 5, sf::LinesStrip);
+
+
+
+  sf::Text txtScore;
+  txtScore.setString("Score :");
+  txtScore.setFont(font);
+  txtScore.setCharacterSize(20);
+  txtScore.setFillColor(sf::Color::White);
+
+  sf::FloatRect textRect = txtScore.getLocalBounds();
+  txtScore.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  txtScore.setPosition(sf::Vector2f(600,415));
+  window.draw(txtScore);
+
+
+  std::string txtValScore=std::to_string(allyScore);
+
+  sf::Text valScore;
+  valScore.setString(txtValScore);
+  valScore.setFont(font);
+  valScore.setCharacterSize(20);
+  valScore.setFillColor(sf::Color::White);
+
+  textRect = valScore.getLocalBounds();
+  valScore.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  valScore.setPosition(sf::Vector2f(600,455));
+  window.draw(valScore);
+
+
+
+}
+
+void afficherScoreEnnemi(sf::RenderWindow &window, sf::Font font, int ennemyScore){
+
+  sf::Vertex cadreScore[] =
+  {
+      sf::Vertex(sf::Vector2f(800, 550)),
+      sf::Vertex(sf::Vector2f(800, 650)),
+      sf::Vertex(sf::Vector2f(1000, 650)),
+      sf::Vertex(sf::Vector2f(1000, 550)),
+      sf::Vertex(sf::Vector2f(800, 550))
+  };
+
+  window.draw(cadreScore, 5, sf::LinesStrip);
+
+
+
+  sf::Text txtScore;
+  txtScore.setString("Score adverse:");
+  txtScore.setFont(font);
+  txtScore.setCharacterSize(20);
+  txtScore.setFillColor(sf::Color::White);
+
+  sf::FloatRect textRect = txtScore.getLocalBounds();
+  txtScore.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  txtScore.setPosition(sf::Vector2f(900,570));
+  window.draw(txtScore);
+
+
+  std::string txtValScore=std::to_string(ennemyScore);
+
+  sf::Text valScore;
+  valScore.setString(txtValScore);
+  valScore.setFont(font);
+  valScore.setCharacterSize(20);
+  valScore.setFillColor(sf::Color::White);
+
+  textRect = valScore.getLocalBounds();
+  valScore.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  valScore.setPosition(sf::Vector2f(900,620));
+  window.draw(valScore);
+
+
+}
+
+
+void afficherProchainePieceCommune(sf::RenderWindow &window, Board board, sf::Font font){
+
+
+  sf::Vertex cadreNouvPiece[] =
+  {
+      sf::Vertex(sf::Vector2f(500, 100)),
+      sf::Vertex(sf::Vector2f(500, 300)),
+      sf::Vertex(sf::Vector2f(700, 300)),
+      sf::Vertex(sf::Vector2f(700, 100)),
+      sf::Vertex(sf::Vector2f(500, 100))
+  };
+
+  window.draw(cadreNouvPiece, 5, sf::LinesStrip);
+
+
+  sf::Text nouvellePiece;
+  nouvellePiece.setString("Piece suivante :");
+  nouvellePiece.setFont(font);
+  nouvellePiece.setCharacterSize(20);
+  nouvellePiece.setFillColor(sf::Color::White);
+
+  sf::FloatRect nouvPieceRect = nouvellePiece.getLocalBounds();
+  nouvellePiece.setOrigin(nouvPieceRect.left + nouvPieceRect.width/2.0f, nouvPieceRect.top  + nouvPieceRect.height/2.0f);
+  nouvellePiece.setPosition(sf::Vector2f(600,120));
+  window.draw(nouvellePiece);
+
+
+
+  sf::RectangleShape rectangle1(sf::Vector2f(28, 28));
+  sf::RectangleShape rectangle2(sf::Vector2f(28, 28));
+  sf::RectangleShape rectangle3(sf::Vector2f(28, 28));
+  sf::RectangleShape rectangle4(sf::Vector2f(28, 28));
+
+  sf::Color colorPiece;
+
+  Piece pieceSuivante=board.getPieceSuivante();
+
+
+  switch(pieceSuivante.getCouleur()){
+    case Couleur::CYAN:
+      colorPiece=sf::Color::Cyan;
+      break;
+    case Couleur::JAUNE:
+      colorPiece=sf::Color::Yellow;
+      break;
+    case Couleur::ORANGE:
+      colorPiece.r=255;
+      colorPiece.g=127;
+      colorPiece.b=80;
+      break;
+    case Couleur::VIOLET:
+      colorPiece=sf::Color::Magenta;
+      break;
+    case Couleur::BLEU:
+      colorPiece=sf::Color::Blue;
+      break;
+    case Couleur::ROUGE:
+      colorPiece=sf::Color::Red;
+      break;
+    case Couleur::VERT:
+      colorPiece=sf::Color::Green;
+      break;
+  }
+
+  int numRectangle=1;
+
+  for(int i=0; i<4; i++){
+    for(int j=0; j<4; j++){
+      if (pieces[(int)pieceSuivante.getType()][0][i][j]!=0){
+        switch(numRectangle){
+          case 1:
+            rectangle1.setPosition(sf::Vector2f(541+j*30, 151+i*30));
+            numRectangle++;
+            break;
+          case 2:
+            rectangle2.setPosition(sf::Vector2f(541+j*30, 151+i*30));
+            numRectangle++;
+            break;
+          case 3:
+            rectangle3.setPosition(sf::Vector2f(541+j*30, 151+i*30));
+            numRectangle++;
+            break;
+          case 4:
+            rectangle4.setPosition(sf::Vector2f(541+j*30, 151+i*30));
+            numRectangle++;
+            break;
+        }
+      }
+    }
+  }
+
+
+  rectangle1.setFillColor(colorPiece);
+
+  rectangle2.setFillColor(colorPiece);
+
+  rectangle3.setFillColor(colorPiece);
+
+  rectangle4.setFillColor(colorPiece);
+
+  window.draw(rectangle1);
+  window.draw(rectangle2);
+  window.draw(rectangle3);
+  window.draw(rectangle4);
+
+}
+
+void afficherPlateauEnnemi(sf::RenderWindow &window, Board ennemyBoard){
+
+
+  sf::Vertex cadreJeu[] =
+  {
+      sf::Vertex(sf::Vector2f(800, 50)),
+      sf::Vertex(sf::Vector2f(800, 490)),
+      sf::Vertex(sf::Vector2f(1000, 490)),
+      sf::Vertex(sf::Vector2f(1000, 50)),
+      sf::Vertex(sf::Vector2f(800, 50))
+  };
+
+  window.draw(cadreJeu, 5, sf::LinesStrip);
+
+
+  sf::RectangleShape rectangle(sf::Vector2f(18, 18));
+  sf::Color colorPiece;
+
+  for(int i=0; i<hauteur; i++){
+    for(int j=0; j<largeur; j++){
+      switch ((Couleur)(ennemyBoard.plateau[i][j])){
+        case Couleur::CYAN:
+          colorPiece=sf::Color::Cyan;
+          break;
+        case Couleur::JAUNE:
+          colorPiece=sf::Color::Yellow;
+          break;
+        case Couleur::ORANGE:
+          colorPiece.r=255;
+          colorPiece.g=127;
+          colorPiece.b=80;
+          break;
+        case Couleur::VIOLET:
+          colorPiece=sf::Color::Magenta;
+          break;
+        case Couleur::BLEU:
+          colorPiece=sf::Color::Blue;
+          break;
+        case Couleur::ROUGE:
+          colorPiece=sf::Color::Red;
+          break;
+        case Couleur::VERT:
+          colorPiece=sf::Color::Green;
+          break;
+        case Couleur::LIBRE:
+          colorPiece=sf::Color::Black;
+          break;
+      }
+
+    rectangle.setFillColor(colorPiece);
+
+    rectangle.setPosition(sf::Vector2f(801+j*20, 51+i*20));
+
+    window.draw(rectangle);
+
+    }
+  }
+}
+
+
+
+void afficherJeuDeuxJoueurs(sf::RenderWindow &window, sf::Font font, Board allyBoard, Board ennemyBoard, int allyScore, int ennemyScore){
+  afficherPlateau(window, allyBoard);
+  afficherScoreAllie(window, font, allyScore);
+  afficherScoreEnnemi(window, font, ennemyScore);
+  afficherProchainePieceCommune(window, allyBoard, font);
+  afficherPlateauEnnemi(window, ennemyBoard);
+
+}
+
 
 
 #endif // !GAME_H
