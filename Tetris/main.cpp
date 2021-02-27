@@ -32,6 +32,7 @@ int main()
 		int niveau=0;
 		int statut=0;
     int score=0;
+    int scoreAdverse=0;
     int NbLignes=0;
     int statutPause=0;
     int multijoueur=0;
@@ -64,6 +65,14 @@ int main()
     Board board;
 
     board.setPieceSuivante();
+
+    sf::Uint8 plateauPacket[hauteur][largeur];
+    int plateauAdverse[hauteur][largeur];
+    for (int i = 0; i < hauteur; i++) {
+      for (int j = 0; j < largeur; j++) {
+        plateauAdverse[i][j] = (int)Couleur::LIBRE;
+      }
+    }
 
 
     while (window.isOpen())
@@ -506,6 +515,22 @@ int main()
       }
 
       else if(statut == 302){
+        window.clear();
+
+
+
+        afficherJeuDeuxJoueurs(window, font, board, plateauAdverse, score, scoreAdverse);
+        window.display();
+
+        board.setPieceCourante();
+        board.setPieceSuivante();
+        board.AfficherPiece();
+        sf::Time t1 = sf::seconds(1);
+        sf::sleep(t1);
+        sf::Packet nextPiece;
+        nextPiece<<board.getPieceSuivante();
+        socket.send(nextPiece, IPInvite, portExterne);
+        statut++;
 
       }
 
@@ -545,6 +570,24 @@ int main()
         packetPieceRecue>>pieceRecue;
         board.setPieceSuivante(pieceRecue);
         statut++;
+      }
+
+      else if(statut == 403){
+        window.clear();
+
+
+
+        afficherJeuDeuxJoueurs(window, font, board, plateauAdverse, score, scoreAdverse);
+        window.display();
+
+        board.setPieceCourante();
+        Piece pieceRecue;
+        sf::Packet packetPieceRecue;
+        socket.receive(packetPieceRecue, IPHote, portExterne);
+        packetPieceRecue>>pieceRecue;
+        board.setPieceSuivante(pieceRecue);
+        board.AfficherPiece();
+
       }
 
     }
