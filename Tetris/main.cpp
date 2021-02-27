@@ -538,9 +538,13 @@ int main()
         statut++;
       }
 
-      else if (statut ==402){
+      else if (statut == 402){
         Piece pieceRecue;
         sf::Packet packetPieceRecue;
+        socket.receive(packetPieceRecue, IPHote, portExterne);
+        packetPieceRecue>>pieceRecue;
+        board.setPieceSuivante(pieceRecue);
+        statut++;
       }
 
     }

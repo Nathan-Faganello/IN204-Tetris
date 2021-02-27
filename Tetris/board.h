@@ -49,7 +49,7 @@ class Board {
 			}
 		}
 
-		void plateauEnvoi(sf::Uint8 envoi[hauteur][largeur]){
+		void plateauEnvoi(sf::Uint8 (&envoi)[hauteur][largeur]){
 			for(int i=0; i< hauteur; i++){
 				for(int j=0; j< largeur; j++){
 					envoi[i][j] = (sf::Uint8) plateau[i][j];
@@ -393,6 +393,16 @@ class Board {
 
 
 };
+
+
+void convertPlateau (sf::Uint8 plateauRecu[hauteur][largeur], int (&plateauInt)[hauteur][largeur]){
+	for (int i=0; i<hauteur; i++){
+		for(int j=0; i<largeur; j++){
+			plateauInt[i][j]=(int)plateauRecu[i][j];
+		}
+	}
+
+}
 
 
 #endif

@@ -1036,7 +1036,7 @@ void afficherProchainePieceCommune(sf::RenderWindow &window, Board board, sf::Fo
 
 }
 
-void afficherPlateauEnnemi(sf::RenderWindow &window, Board ennemyBoard){
+void afficherPlateauEnnemi(sf::RenderWindow &window, int plateauEnnemi[hauteur][largeur]){
 
 
   sf::Vertex cadreJeu[] =
@@ -1056,7 +1056,7 @@ void afficherPlateauEnnemi(sf::RenderWindow &window, Board ennemyBoard){
 
   for(int i=0; i<hauteur; i++){
     for(int j=0; j<largeur; j++){
-      switch ((Couleur)(ennemyBoard.plateau[i][j])){
+      switch ((Couleur)(plateauEnnemi[i][j])){
         case Couleur::CYAN:
           colorPiece=sf::Color::Cyan;
           break;
@@ -1097,12 +1097,12 @@ void afficherPlateauEnnemi(sf::RenderWindow &window, Board ennemyBoard){
 
 
 
-void afficherJeuDeuxJoueurs(sf::RenderWindow &window, sf::Font font, Board allyBoard, Board ennemyBoard, int allyScore, int ennemyScore){
+void afficherJeuDeuxJoueurs(sf::RenderWindow &window, sf::Font font, Board allyBoard, int plateauEnnemi[hauteur][largeur], int allyScore, int ennemyScore){
   afficherPlateau(window, allyBoard);
   afficherScoreAllie(window, font, allyScore);
   afficherScoreEnnemi(window, font, ennemyScore);
   afficherProchainePieceCommune(window, allyBoard, font);
-  afficherPlateauEnnemi(window, ennemyBoard);
+  afficherPlateauEnnemi(window, plateauEnnemi);
 
 }
 
