@@ -3,6 +3,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Sleep.hpp>
 #include <SFML/System/Time.hpp>
+#include <SFML/Network/UdpSocket.hpp>
 #include <iostream>
 #include <string>
 #include <time.h>
@@ -11,7 +12,7 @@
 #include "board.h"
 #include "game.h"
 #include <SFML/Network/IpAddress.hpp>
-
+#include <SFML/Network/Packet.hpp>
 
 
 
@@ -35,12 +36,29 @@ int main()
     int statutPause=0;
     int multijoueur=0;
     int heberge=0;
-    std::string entreeIP;
+    std::string IPHoteTxt;
+    sf::IpAddress IPHote;
+    sf::IpAddress IPInvite;
+    std::string portExterneTxt;
 
 
     sf::Time dropSpeed;
     sf::Time tempsChute;
     sf::Time deltaT;
+
+    sf::UdpSocket socket;
+
+    // lie la socket à un port
+    if (socket.bind(sf::Socket::AnyPort) != sf::Socket::Done)
+    {
+      window.clear();
+      afficherErreurReseau(window, font);
+      window.display();
+      sf::Time t1 = sf::seconds(5);
+      sf::sleep(t1);
+    }
+    unsigned short localPort=socket.getLocalPort();
+    unsigned short portExterne;
 
 
     Board board;
@@ -154,10 +172,7 @@ int main()
             }
             else if(statut==201){
               if (event.type == sf::Event::KeyPressed){
-                if(event.key.code == sf::Keyboard::Enter){
-                  statut=300;
-                }
-                else if (event.key.code == sf::Keyboard::Escape){
+                if (event.key.code == sf::Keyboard::Escape){
                   statut=200;
                 }
               }
@@ -165,21 +180,81 @@ int main()
             else if(statut==202){
               if (event.type == sf::Event::TextEntered){
                 if (event.text.unicode < 128&&event.text.unicode!=13&&event.text.unicode!=8&&event.text.unicode!=27){
-                  entreeIP.push_back(static_cast<char>(event.text.unicode));
+                  IPHoteTxt.push_back(static_cast<char>(event.text.unicode));
                 }
                 else if(event.text.unicode==8){
-                  entreeIP.pop_back();
+                  IPHoteTxt.pop_back();
                 }
                 else if(event.text.unicode==13){
-                  statut=400;
+
+                  statut=203;
                 }
                 else if(event.text.unicode==27){
-                  entreeIP.clear();
+                  IPHoteTxt.clear();
+                  statut=200;
+                }
+              }
+            }
+            else if(statut==203){
+              if (event.type == sf::Event::TextEntered){
+                if (event.text.unicode < 128&&event.text.unicode!=13&&event.text.unicode!=8&&event.text.unicode!=27){
+                  portExterneTxt.push_back(static_cast<char>(event.text.unicode));
+                }
+                else if(event.text.unicode==8){
+                  portExterneTxt.pop_back();
+                }
+                else if(event.text.unicode==13){
+                  char buffer[]="OK";
+                  IPHote=sf::IpAddress(IPHoteTxt);
+                  portExterne=(unsigned short) std::stoi(portExterneTxt);
+                  if (socket.send(buffer, sizeof(buffer), IPHote, portExterne)!=sf::Socket::Done){
+                    statut=204;
+                  }
+                  else{
+                    niveau=0;
+                    statut=400;
+                  }
+                }
+                else if(event.text.unicode==27){
+                  portExterneTxt.clear();
+                  statut=202;
+                }
+              }
+            }
+            else if(statut==204){
+              if (event.type == sf::Event::KeyPressed){
+                if (event.key.code == sf::Keyboard::Escape){
+                  statut=200;
+                }
+              }
+            }
+            else if (statut==300){
+              if (event.type == sf::Event::KeyPressed){
+                if (event.key.code == sf::Keyboard::Right){
+                  niveau=(niveau+1)%16;
+                }
+                else if (event.key.code == sf::Keyboard::Left){
+                  if (niveau==0){niveau=16;}
+                  niveau=niveau-1;
+                }
+                else if (event.key.code == sf::Keyboard::Enter){
+                  dropSpeed=sf::seconds(1.5)-(sf::seconds(niveau*1.499/15));
+                  tempsChute=dropSpeed;
+                  sf::Packet packNiv;
+                  sf::Uint8 nivConvert = (sf::Uint8) niveau;
+                  packNiv<<nivConvert;
+                  socket.send(packNiv, IPInvite, portExterne);
+                  statut++;
+                }
+                else if(event.key.code == sf::Keyboard::Escape){
                   statut=200;
                 }
               }
             }
           }
+
+
+
 
 
 
@@ -200,31 +275,7 @@ int main()
 
 				else if(statut==1){  //choix du niveau
 					window.clear();
-					sf::Text affNiveau;
-					affNiveau.setString("Niveau");
-					affNiveau.setFont(font);
-					affNiveau.setCharacterSize(30);
-					affNiveau.setFillColor(sf::Color::White);
-					sf::FloatRect textRect = affNiveau.getLocalBounds();
-					affNiveau.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
-					affNiveau.setPosition(sf::Vector2f(1080/2.0f,200));
-
-
-
-					std::string textNiveau=std::to_string(niveau);
-
-					sf::Text valNiveau;
-					valNiveau.setString(textNiveau);
-					valNiveau.setFont(font);
-					valNiveau.setCharacterSize(30);
-					valNiveau.setFillColor(sf::Color::White);
-					textRect = valNiveau.getLocalBounds();
-					valNiveau.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
-					valNiveau.setPosition(sf::Vector2f(1080/2.0f,350));
-
-
-					window.draw(affNiveau);
-					window.draw(valNiveau);
+          afficherNiveau(window, font, niveau);
 					window.display();
 			}
 
@@ -252,15 +303,7 @@ int main()
 
 
         tempsChute=dropSpeed;
-        /*for(int i=0; i<hauteur; i++){
-          for(int j=0; j<largeur; j++){
-            std::cout<<" "<<board.plateau[i][j];
-          }
-          std::cout<<std::endl;
-        }
-        std::cout<<std::endl; */
-        //sf::Time t1 = sf::seconds(0);
-        //sf::sleep(t1); *
+
         sf::Clock clock;
         sf::Clock timerUp;
         sf::Clock timerDown;
@@ -388,27 +431,112 @@ int main()
       }
 
       else if(statut==200){
+
         window.clear();
         afficherHeberge(window, font, heberge);
         window.display();
       }
 
       else if(statut==201){
+
+        char buffer[50];
+
+        std::size_t received;
+
+
+
         window.clear();
         sf::IpAddress addressIP = sf::IpAddress::getPublicAddress();
-        afficherIP(window, font, addressIP);
+        afficherIP(window, font, addressIP, localPort);
         window.display();
+        socket.receive(buffer, sizeof(buffer), received, IPInvite, portExterne);
+        std::string txtTest(buffer, received);
+        char OK[]="OK";
+        if(strcmp(txtTest.c_str(), OK)!=0){
+          statut=204;
+        }
+        else{
+          statut=300;
+          niveau=0;
+        }
 
       }
 
       else if(statut==202){
         window.clear();
-        afficherEntreeIP(window, font, entreeIP);
+        afficherEntreeIP(window, font, IPHoteTxt);
         window.display();
       }
 
+      else if(statut==203){
+        window.clear();
+        afficherEntreePort(window, font, portExterneTxt);
+        window.display();
+      }
+
+      else if(statut==204){
+        window.clear();
+        afficherErreurConnection(window, font);
+        window.display();
+      }
+
+      else if(statut==300){
+
+        window.clear();
+        afficherNiveau(window, font, niveau);
+        window.display();
+
+      }
+
+      else if (statut == 301){
+
+        window.clear();
+        afficherAttenteAdversaire(window, font);
+        window.display();
+        sf::Packet packet;
+        std::string ready;
+        socket.receive(packet, IPInvite, portExterne);
+        packet>>ready;
+        if (ready.compare("ready")==0){
+          statut++;
+        }
+      }
+
+      else if(statut == 302){
+        
+      }
+
+
       else if(statut==400){
-        std::cout<<"youpi ça marche"<<std::endl;
+        window.clear();
+        afficherAttenteChoixNiveau(window, font);
+        window.display();
+        sf::Packet nivRecu;
+        socket.receive(nivRecu, IPHote, portExterne);
+        sf::Uint8 valNiv;
+        nivRecu>>valNiv;
+        niveau=(int)valNiv;
+        dropSpeed=sf::seconds(1.5)-(sf::seconds(niveau*1.499/15));
+        tempsChute=dropSpeed;
+        statut++;
+
+      }
+
+      else if (statut == 401){
+        window.clear();
+        afficherNiveauChoisi(window, font, niveau);
+        window.display();
+        sf::Time t1 = sf::seconds(2);
+        sf::sleep(t1);
+        sf::Packet packet;
+        std::string ready = "ready";
+        packet<<ready;
+        socket.send(packet, IPHote, portExterne);
+        statut++;
+      }
+
+      else if (statut ==402){
+
       }
 
     }

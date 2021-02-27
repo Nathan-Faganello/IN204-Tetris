@@ -49,6 +49,14 @@ class Board {
 			}
 		}
 
+		void plateauEnvoi(sf::Uint8 envoi[hauteur][largeur]){
+			for(int i=0; i< hauteur; i++){
+				for(int j=0; j< largeur; j++){
+					envoi[i][j] = (sf::Uint8) plateau[i][j];
+				}
+			}
+		}
+
 		void setPieceCourante(){
 			piece_courante=piece_suivante;
 		}
@@ -85,7 +93,7 @@ class Board {
 					}
 				}
 			}
-			
+
 			return true;
 		}
 

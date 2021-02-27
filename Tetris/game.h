@@ -137,6 +137,89 @@ void afficherIntro(sf::RenderWindow &window, sf::Font font){
 
 }
 
+
+void afficherAttenteChoixNiveau(sf::RenderWindow &window, sf::Font font){
+  sf::Text message;
+  message.setFont(font);
+  message.setCharacterSize(30);
+  message.setFillColor(sf::Color::White);
+  message.setString("En attente du choix du niveau par l'hote.");
+
+  sf::FloatRect textRect = message.getLocalBounds();
+  message.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  message.setPosition(sf::Vector2f(1080/2.0f,720/2.0f));
+  window.draw(message);
+
+}
+
+void afficherAttenteAdversaire(sf::RenderWindow &window, sf::Font font){
+  sf::Text message;
+  message.setFont(font);
+  message.setCharacterSize(30);
+  message.setFillColor(sf::Color::White);
+  message.setString("En attente de l'adversaire.");
+
+  sf::FloatRect textRect = message.getLocalBounds();
+  message.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  message.setPosition(sf::Vector2f(1080/2.0f,720/2.0f));
+  window.draw(message);
+
+}
+
+void afficherNiveauChoisi(sf::RenderWindow &window, sf::Font font, int niveau){
+  sf::Text affNiveau;
+  affNiveau.setString("Niveau choisi par l'hote");
+  affNiveau.setFont(font);
+  affNiveau.setCharacterSize(30);
+  affNiveau.setFillColor(sf::Color::White);
+  sf::FloatRect textRect = affNiveau.getLocalBounds();
+  affNiveau.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  affNiveau.setPosition(sf::Vector2f(1080/2.0f,200));
+
+  window.draw(affNiveau);
+
+  std::string textNiveau=std::to_string(niveau);
+
+  sf::Text valNiveau;
+  valNiveau.setString(textNiveau);
+  valNiveau.setFont(font);
+  valNiveau.setCharacterSize(30);
+  valNiveau.setFillColor(sf::Color::White);
+  textRect = valNiveau.getLocalBounds();
+  valNiveau.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  valNiveau.setPosition(sf::Vector2f(1080/2.0f,350));
+
+
+  window.draw(valNiveau);
+}
+
+void afficherNiveau(sf::RenderWindow &window, sf::Font font, int niveau){
+  sf::Text affNiveau;
+  affNiveau.setString("Niveau");
+  affNiveau.setFont(font);
+  affNiveau.setCharacterSize(30);
+  affNiveau.setFillColor(sf::Color::White);
+  sf::FloatRect textRect = affNiveau.getLocalBounds();
+  affNiveau.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  affNiveau.setPosition(sf::Vector2f(1080/2.0f,200));
+
+  window.draw(affNiveau);
+
+  std::string textNiveau=std::to_string(niveau);
+
+  sf::Text valNiveau;
+  valNiveau.setString(textNiveau);
+  valNiveau.setFont(font);
+  valNiveau.setCharacterSize(30);
+  valNiveau.setFillColor(sf::Color::White);
+  textRect = valNiveau.getLocalBounds();
+  valNiveau.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  valNiveau.setPosition(sf::Vector2f(1080/2.0f,350));
+
+
+  window.draw(valNiveau);
+}
+
 void afficherScore(sf::RenderWindow &window, int score, sf::Font font){
 
 
@@ -715,6 +798,22 @@ void afficherErreurConnection(sf::RenderWindow &window,sf::Font font){
   message.setCharacterSize(30);
   message.setFillColor(sf::Color::White);
   message.setString("Impossible d'etablir la connection entre les joueurs.");
+
+  sf::FloatRect textRect = message.getLocalBounds();
+  message.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  message.setPosition(sf::Vector2f(1080/2.0f,720/2.0f));
+  window.draw(message);
+
+}
+
+void afficherErreurCommunication(sf::RenderWindow &window,sf::Font font){
+
+
+  sf::Text message;
+  message.setFont(font);
+  message.setCharacterSize(30);
+  message.setFillColor(sf::Color::White);
+  message.setString("Communication erronnée entre les deux joueurs, retour au menu");
 
   sf::FloatRect textRect = message.getLocalBounds();
   message.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
