@@ -74,6 +74,16 @@ class Board {
 			piece_suivante.setRota(0);
 		}
 
+		void setPieceSuivante(Piece piece){
+			piece_suivante.setPosX(spawn_X);
+			piece_suivante.setPosY(spawn_Y);
+
+			piece_suivante.setType(piece.getType());
+			piece_suivante.setCouleur(piece.getCouleur());
+
+			piece_suivante.setRota(0);
+		}
+
 
 		bool pieceSpawnable(Piece p) {
 			int type = (int)p.getType();

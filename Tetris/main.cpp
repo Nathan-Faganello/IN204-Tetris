@@ -498,12 +498,15 @@ int main()
         socket.receive(packet, IPInvite, portExterne);
         packet>>ready;
         if (ready.compare("ready")==0){
+          sf::Packet nextPiece;
+          nextPiece<<board.getPieceSuivante();
+          socket.send(nextPiece, IPInvite, portExterne);
           statut++;
         }
       }
 
       else if(statut == 302){
-        
+
       }
 
 
@@ -536,7 +539,8 @@ int main()
       }
 
       else if (statut ==402){
-
+        Piece pieceRecue;
+        sf::Packet packetPieceRecue;
       }
 
     }

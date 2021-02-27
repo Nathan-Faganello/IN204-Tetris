@@ -1,6 +1,7 @@
 #ifndef PIECE_H
 #define PIECE_H
 
+#include <SFML/Network/Packet.hpp>
 
 const int NB_PIECE = 7;
 const int NB_ROTA = 4;
@@ -218,6 +219,10 @@ private:
 public:
 	Piece(){}
 	Piece(Type theType, int theRota, int theX, int theY, Couleur theColor): type(theType), rotation(theRota), position_X(theX), position_Y(theY), couleur(theColor) {}
+
+
+
+
 	void setType(Type theType) {
 		type = theType;
 	}
@@ -248,6 +253,42 @@ public:
 	Couleur getCouleur() {
 		return couleur;
 	}
+
+	friend sf::Packet& operator <<(sf::Packet& packet, const Piece& piece);
+	friend sf::Packet& operator >>(sf::Packet& packet, Piece& piece);
+
 };
+
+
+sf::Packet& operator <<(sf::Packet& packet, const Piece& piece)
+{
+		sf::Uint8 type = (sf::Uint8) piece.type;
+		sf::Uint8 rota = (sf::Uint8) piece.rotation;
+		sf::Uint8 posX = (sf::Uint8) piece.position_X;
+		sf::Uint8 posY = (sf::Uint8) piece.position_Y;
+		sf::Uint8 color = (sf::Uint8) piece.couleur;
+
+
+		return (packet << type << rota << posX << posY << color);
+}
+
+sf::Packet& operator >>(sf::Packet& packet, Piece& piece)
+{
+		sf::Uint8 type;
+		sf::Uint8 rota;
+		sf::Uint8 posX;
+		sf::Uint8 posY;
+		sf::Uint8 color;
+
+		packet >> type >> rota >> posX >> posY >> color;
+
+		piece.type= (Type)type;
+		piece.rotation=(int)rota;
+		piece.position_X=(int)posX;
+		piece.position_Y=(int)posY;
+		piece.couleur=(Couleur)color;
+
+		return packet ;
+}
 
 #endif // !PIECE_H
