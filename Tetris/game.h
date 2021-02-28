@@ -9,6 +9,7 @@
 #include"piece.h"
 #include <string>
 #include <SFML/Network/IpAddress.hpp>
+#include <SFML/Network/Packet.hpp>
 
 
 //calcule le nouveau score après la destruction de nbLignes, selon le niveau.
@@ -1095,6 +1096,17 @@ void afficherPlateauEnnemi(sf::RenderWindow &window, int plateauEnnemi[hauteur][
 
     }
   }
+}
+
+void recepScore(sf::Packet &packet, int &score){
+  sf::Uint8 scoreSF;
+  packet>>scoreSF;
+  score=(int)scoreSF;
+}
+
+void envoiScore(sf::Packet &packet, const int score){
+  sf::Uint8 scoreSF=(sf::Uint8)score;
+  packet<<scoreSF;
 }
 
 //Affiche l'entièreté du plateau en un seul appel (mode 2 joueurs)

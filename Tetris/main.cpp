@@ -253,6 +253,7 @@ int main()
                   sf::Uint8 nivConvert = (sf::Uint8) niveau;
                   packNiv<<nivConvert;
                   socket.send(packNiv, IPInvite, portExterne);
+                  packNiv.clear();
                   statut++;
                 }
                 else if(event.key.code == sf::Keyboard::Escape){
@@ -347,7 +348,7 @@ int main()
           }
 
           else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            if(timerUp.getElapsedTime()>=sf::seconds(0.3)){
+            if(timerUp.getElapsedTime()>=sf::seconds(0.2)){
               finChute=board.deplacerPieceBas();
               timerDown.restart();
               window.clear();
@@ -383,7 +384,7 @@ int main()
         if(changement){
           NbLignes=board.ligne_full();
           if(NbLignes!=0){
-            score = calculScore(score, niveau, NbLignes);
+            calculScore(score, niveau, NbLignes);
             window.clear();
             afficherPlateau(window,board);
             afficherScore(window, score, font);
@@ -510,15 +511,13 @@ int main()
           sf::Packet nextPiece;
           nextPiece<<board.getPieceSuivante();
           socket.send(nextPiece, IPInvite, portExterne);
+          nextPiece.clear();
           statut++;
         }
       }
 
       else if(statut == 302){
         window.clear();
-
-
-
         afficherJeuDeuxJoueurs(window, font, board, plateauAdverse, score, scoreAdverse);
         window.display();
 
@@ -569,14 +568,12 @@ int main()
         socket.receive(packetPieceRecue, IPHote, portExterne);
         packetPieceRecue>>pieceRecue;
         board.setPieceSuivante(pieceRecue);
+        packetPieceRecue.clear();
         statut++;
       }
 
       else if(statut == 403){
         window.clear();
-
-
-
         afficherJeuDeuxJoueurs(window, font, board, plateauAdverse, score, scoreAdverse);
         window.display();
 
@@ -587,6 +584,129 @@ int main()
         packetPieceRecue>>pieceRecue;
         board.setPieceSuivante(pieceRecue);
         board.AfficherPiece();
+        packetPieceRecue.clear();
+        statut++;
+      }
+
+      else if(statut == 404) {
+
+        tempsChute=dropSpeed;
+
+        sf::Clock clock;
+        sf::Clock timerUp;
+        sf::Clock timerDown;
+        bool finChute;
+        sf::Time coolDown=sf::seconds(0.35f);
+        bool firstTime=true;
+        do {
+          window.clear();
+
+          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+
+            board.deplacerPieceDroite();
+
+          }
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+
+            board.deplacerPieceGauche();
+
+          }
+
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            if(firstTime){
+              board.tournerPiece();
+              firstTime=false;
+            }
+            else{
+              if(timerUp.getElapsedTime()>=coolDown){
+                board.tournerPiece();
+                timerUp.restart();
+              }
+            }
+          }
+
+          else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            if(timerUp.getElapsedTime()>=sf::seconds(0.2)){
+              finChute=board.deplacerPieceBas();
+              timerDown.restart();
+              window.clear();
+              afficherJeuDeuxJoueurs(window, font, board, plateauAdverse, score, scoreAdverse);
+              window.display();
+
+
+              if (finChute){
+                break;
+              }
+
+            }
+          }
+
+
+          sf::Time deltaT = clock.getElapsedTime();
+          tempsChute-=deltaT;
+          clock.restart();
+
+          afficherPlateau(window,board);
+          afficherScore(window, score, font);
+          afficherProchainePiece(window, board, font);
+
+          window.display();
+
+
+        } while(tempsChute>sf::Time::Zero);
+
+        bool changement=board.deplacerPieceBas();
+
+
+        if(changement){
+          NbLignes=board.ligne_full();
+          if(NbLignes!=0){
+            calculScore(score, niveau, NbLignes);
+            window.clear();
+            afficherJeuDeuxJoueurs(window, font, board, plateauAdverse, score, scoreAdverse);
+            window.display();
+          }
+          board.setPieceCourante();
+          Piece pieceRecue;
+          sf::Packet packetPieceRecue;
+          socket.receive(packetPieceRecue, IPHote, portExterne);
+          packetPieceRecue>>pieceRecue;
+          board.setPieceSuivante(pieceRecue);
+          packetPieceRecue.clear();
+          if(!board.pieceSpawnable(board.getPieceCourante())){
+            //A DEF
+          }
+          else{
+            board.plateauEnvoi(plateauPacket);
+            std::size_t tailleEnvoi=(std::size_t)hauteur*largeur*sizeof(sf::Uint8);
+            socket.send(plateauPacket, tailleEnvoi, IPHote, portExterne);
+            std::size_t received;
+            socket.receive(plateauPacket, tailleEnvoi, received, IPHote, portExterne);
+            if (received==tailleEnvoi){
+              convertPlateau(plateauPacket, plateauAdverse);
+            }
+            sf::Packet packetScore;
+            envoiScore(packetScore, score);
+            socket.send(packetScore, IPHote, portExterne);
+            packetScore.clear();
+            socket.receive(packetScore, IPHote, portExterne);
+            recepScore(packetScore, scoreAdverse);
+            packetScore.clear();
+
+            window.clear();
+            afficherJeuDeuxJoueurs(window, font, board, plateauAdverse, score, scoreAdverse);
+            window.display();
+            board.AfficherPiece();
+            sf::Time t1 = sf::seconds(0.4);
+            sf::sleep(t1);
+          }
+        }
+        else {
+          window.clear();
+          afficherJeuDeuxJoueurs(window, font, board, plateauAdverse, score, scoreAdverse);
+          window.display();
+        }
+
 
       }
 
