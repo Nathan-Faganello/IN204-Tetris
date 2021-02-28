@@ -254,10 +254,11 @@ public:
 		return couleur;
 	}
 
-	friend sf::Packet& operator <<(sf::Packet& packet, const Piece& piece);
+	friend sf::Packet& operator <<(sf::Packet& packet, const Piece& piece); //surcharge d'opérateur pour manipuler plus facilement ensemble les packets et les pièces.
 	friend sf::Packet& operator >>(sf::Packet& packet, Piece& piece);
 
 };
+
 
 
 sf::Packet& operator <<(sf::Packet& packet, const Piece& piece)

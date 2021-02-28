@@ -49,6 +49,8 @@ class Board {
 			}
 		}
 
+		//tranforme le plateau en un tableau de 'sf::Uint8', représentant la même chose mais étant plus "sûr" à l'envoi
+
 		void plateauEnvoi(sf::Uint8 (&envoi)[hauteur][largeur]){
 			for(int i=0; i< hauteur; i++){
 				for(int j=0; j< largeur; j++){
@@ -57,9 +59,13 @@ class Board {
 			}
 		}
 
+		//passe la pièce suivante comme pièce courante
+
 		void setPieceCourante(){
 			piece_courante=piece_suivante;
 		}
+
+		//défini une nouvelle pièce suivante, aléatoirement
 
 		void setPieceSuivante(){
 			//on place la nouvelle pi�ce au point de spawn
@@ -74,6 +80,8 @@ class Board {
 			piece_suivante.setRota(0);
 		}
 
+		//permet de passer une pièce en nouvelle pièce suivante (utile en ode 2 joueurs pour que l'invité ai la même pièce que l'hôte)
+
 		void setPieceSuivante(Piece piece){
 			piece_suivante.setPosX(spawn_X);
 			piece_suivante.setPosY(spawn_Y);
@@ -84,6 +92,7 @@ class Board {
 			piece_suivante.setRota(0);
 		}
 
+		//vérfie que la nouvelle pièce puisse être placé sur le plateau
 
 		bool pieceSpawnable(Piece p) {
 			int type = (int)p.getType();
@@ -106,6 +115,8 @@ class Board {
 
 			return true;
 		}
+
+		//dispose la pièce la courante sur le plateau
 
 		void AfficherPiece() {
 
@@ -153,6 +164,7 @@ class Board {
 			}
 		}
 
+		//enlève la pièce courante du plateau
 
 		void EffacerPiece() {
 			int type = (int)piece_courante.getType();
@@ -174,6 +186,8 @@ class Board {
 				}
 			}
 		}
+
+		//vérifie que la pièce puisse effectuer une rotation
 
 		bool pieceTournable() {
 			int type = (int)piece_courante.getType();
@@ -205,6 +219,8 @@ class Board {
 			return true;
 		}
 
+		//effectue la rotation de la pièce
+
 		void tournerPiece() {
 			//on verifie d'abord que l'on peut tourner la pi�ce
 			if (pieceTournable()) {
@@ -214,6 +230,8 @@ class Board {
 			}
 			AfficherPiece();
 		}
+
+		//vérifie que la pièce puisse se déplacer vers le bas
 
 		bool pieceDeplacableBas() {
 			int type = (int)piece_courante.getType();
@@ -249,6 +267,8 @@ class Board {
 			return true;
 		}
 
+		//vérifie que la pièce puisse se déplacer vers la gauche
+
 		bool pieceDeplacableGauche() {
 			int type = (int)piece_courante.getType();
 			int rotation = piece_courante.getRota();
@@ -281,6 +301,8 @@ class Board {
 			return true;
 		}
 
+		//vérifie que la pièce puisse se déplacer vers la gauche
+
 		bool pieceDeplacableDroite() {
 			int type = (int)piece_courante.getType();
 			int rotation = piece_courante.getRota();
@@ -312,6 +334,8 @@ class Board {
 			return true;
 		}
 
+		//déplace la pièce vers le bas d'une case
+
 		bool deplacerPieceBas() {
 			//on verifie d'abord que l'on peut d�placer la pi�ce
 			if (pieceDeplacableBas()) {
@@ -332,6 +356,8 @@ class Board {
 
 		}
 
+		//déplace la pièce vers la gauche d'une case
+
 		void deplacerPieceGauche() {
 			//on verifie d'abord que l'on peut d�placer la pi�ce
 			if (pieceDeplacableGauche()) {
@@ -342,6 +368,8 @@ class Board {
 
 			AfficherPiece();
 		}
+
+		//déplace la pièce vers la droite d'une case
 
 		void deplacerPieceDroite() {
 			//on verifie d'abord que l'on peut d�placer la pi�ce
@@ -394,6 +422,8 @@ class Board {
 
 };
 
+
+//transforme un plateau (un tableau) en format 'sf::Uint8' qui a été reçu en un tableau de 'int'
 
 void convertPlateau (sf::Uint8 plateauRecu[hauteur][largeur], int (&plateauInt)[hauteur][largeur]){
 	for (int i=0; i<hauteur; i++){

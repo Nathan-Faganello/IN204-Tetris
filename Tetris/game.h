@@ -11,7 +11,9 @@
 #include <SFML/Network/IpAddress.hpp>
 
 
-int calculScore(int score, int niveau, int nbLignes){
+//calcule le nouveau score après la destruction de nbLignes, selon le niveau.
+
+void calculScore(int &score, int niveau, int nbLignes){
   int ajout;
   switch(nbLignes)
   {
@@ -32,48 +34,12 @@ int calculScore(int score, int niveau, int nbLignes){
       ajout=0;
       break;
   }
-  return score+(niveau+1)*ajout;
-}
-
-void mettrePause(bool etat_pause) {
-  etat_pause = true;
-}
-
-void mettrePlay(bool etat_pause) {
-  etat_pause = false;
-}
-
-
-void finJeu(bool etat_fin_jeu) {
-  etat_fin_jeu = true;
+  score=score+(niveau+1)*ajout;
 }
 
 
 
-
-void update(sf::Time deltaT, sf::Time &TempsChute, Board &plateau, sf::Time dropSpeed) {
-
-
-  TempsChute = TempsChute - deltaT;
-
-  if (TempsChute<=sf::Time::Zero) {
-
-    TempsChute = dropSpeed;
-
-    if (plateau.deplacerPieceBas()) {
-
-      plateau.setPieceCourante();
-      plateau.setPieceSuivante();
-
-    }
-  }
-
-
-}
-
-
-
-
+//fonction d'affichage de l'introduction du jeu, lors de l'ouverture
 
 void afficherIntro(sf::RenderWindow &window, sf::Font font){
 
@@ -137,6 +103,7 @@ void afficherIntro(sf::RenderWindow &window, sf::Font font){
 
 }
 
+//affiche un message d'attente pour l'invité pendant que l'hôte choisi le niveau.
 
 void afficherAttenteChoixNiveau(sf::RenderWindow &window, sf::Font font){
   sf::Text message;
@@ -152,6 +119,8 @@ void afficherAttenteChoixNiveau(sf::RenderWindow &window, sf::Font font){
 
 }
 
+//message qui est utilisé quand on est en attente d'une réponse de l'adversaire.
+
 void afficherAttenteAdversaire(sf::RenderWindow &window, sf::Font font){
   sf::Text message;
   message.setFont(font);
@@ -165,6 +134,8 @@ void afficherAttenteAdversaire(sf::RenderWindow &window, sf::Font font){
   window.draw(message);
 
 }
+
+//affiche pour l'invité le niveau choisi par l'hôte/
 
 void afficherNiveauChoisi(sf::RenderWindow &window, sf::Font font, int niveau){
   sf::Text affNiveau;
@@ -193,6 +164,8 @@ void afficherNiveauChoisi(sf::RenderWindow &window, sf::Font font, int niveau){
   window.draw(valNiveau);
 }
 
+//affiche le niveau qui est en train d'être choisi (interface de choix).
+
 void afficherNiveau(sf::RenderWindow &window, sf::Font font, int niveau){
   sf::Text affNiveau;
   affNiveau.setString("Niveau");
@@ -219,6 +192,8 @@ void afficherNiveau(sf::RenderWindow &window, sf::Font font, int niveau){
 
   window.draw(valNiveau);
 }
+
+//fonction d'affichage de l'encadré du score pendant la partie. (mode 1 joueur)
 
 void afficherScore(sf::RenderWindow &window, int score, sf::Font font){
 
@@ -262,6 +237,8 @@ void afficherScore(sf::RenderWindow &window, int score, sf::Font font){
   window.draw(valScore);
 
 }
+
+//affiche l'encadré avec la prochaine pièce qui entrera en jeu (mode 1 joueur)
 
 void afficherProchainePiece(sf::RenderWindow &window, Board board, sf::Font font){
 
@@ -370,6 +347,8 @@ void afficherProchainePiece(sf::RenderWindow &window, Board board, sf::Font font
 
 }
 
+//affiche le plateau de jeu avec les pièces déjà posées et la pièce en cours.
+
 void afficherPlateau(sf::RenderWindow &window, Board board){
 
   sf::Vertex cadreJeu[] =
@@ -428,6 +407,8 @@ void afficherPlateau(sf::RenderWindow &window, Board board){
   }
 }
 
+//interface de pause (disponible qu'en mode 1 joueur)
+
 void afficherPause(sf::RenderWindow &window,sf::Font font, int statutPause){
 
 
@@ -483,6 +464,8 @@ void afficherPause(sf::RenderWindow &window,sf::Font font, int statutPause){
   window.draw(messageStatutPause2);
 }
 
+//affichage de la fin de partie (mode 1 joueur)
+
 void afficherFin(sf::RenderWindow &window, sf::Font font, int score){
 
   sf::Text line1;
@@ -533,6 +516,8 @@ void afficherFin(sf::RenderWindow &window, sf::Font font, int score){
   line5.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+100));
   window.draw(line5);
 }
+
+//interface du choix du mode entre 1 ou 2 joueurs
 
 void afficherMulti(sf::RenderWindow &window,sf::Font font, int multijoueur){
 
@@ -589,6 +574,8 @@ void afficherMulti(sf::RenderWindow &window,sf::Font font, int multijoueur){
   window.draw(messageStatutChoix2);
 }
 
+//interface de choix entre être l'hôte ou rejoindre une partie.
+
 void afficherHeberge(sf::RenderWindow &window,sf::Font font, int heberge){
 
 
@@ -643,6 +630,8 @@ void afficherHeberge(sf::RenderWindow &window,sf::Font font, int heberge){
   window.draw(messageStatutChoix1);
   window.draw(messageStatutChoix2);
 }
+
+//interface pour l'hôte, affiche son IP et le port local utilisé, à transmettre à l'invité pour qu'il puisse rejoindre.
 
 void afficherIP(sf::RenderWindow &window,sf::Font font, sf::IpAddress addressIP, unsigned short localPort){
 
@@ -709,6 +698,8 @@ void afficherIP(sf::RenderWindow &window,sf::Font font, sf::IpAddress addressIP,
 
 }
 
+//interface pour écrire lIP de l'hôte pour rejoindre la partie.
+
 void afficherEntreeIP(sf::RenderWindow &window,sf::Font font, std::string entreeIP){
 
 
@@ -749,6 +740,7 @@ void afficherEntreeIP(sf::RenderWindow &window,sf::Font font, std::string entree
 
 }
 
+//interface pour écrire le port utilisé par l'hôte pour pouvoir rejoindre la partie.
 
 void afficherEntreePort(sf::RenderWindow &window,sf::Font font, std::string portExterneTxt){
 
@@ -789,6 +781,7 @@ void afficherEntreePort(sf::RenderWindow &window,sf::Font font, std::string port
 
 }
 
+//Message d'erreur si jamais la connexion échoue
 
 void afficherErreurConnection(sf::RenderWindow &window,sf::Font font){
 
@@ -806,6 +799,9 @@ void afficherErreurConnection(sf::RenderWindow &window,sf::Font font){
 
 }
 
+
+//Message d'erreur envoyé si le contenue reçu n'est pas le bon.
+
 void afficherErreurCommunication(sf::RenderWindow &window,sf::Font font){
 
 
@@ -822,6 +818,7 @@ void afficherErreurCommunication(sf::RenderWindow &window,sf::Font font){
 
 }
 
+//message s'affichant au début du jeu si jamais il est impossible d'ouvrir un port, pour signaler que le mode 2 joueurs ne sera pas fonctionnel
 
 void afficherErreurReseau(sf::RenderWindow &window,sf::Font font){
 
@@ -839,7 +836,7 @@ void afficherErreurReseau(sf::RenderWindow &window,sf::Font font){
 
 }
 
-
+//Affiche le score du joueur pendant la partie (en mode 2 joueurs)
 
 void afficherScoreAllie(sf::RenderWindow &window, sf::Font font, int allyScore){
 
@@ -885,6 +882,8 @@ void afficherScoreAllie(sf::RenderWindow &window, sf::Font font, int allyScore){
 
 }
 
+//affiche le score adverse pendant la partie (mode 2 joueurs)
+
 void afficherScoreEnnemi(sf::RenderWindow &window, sf::Font font, int ennemyScore){
 
   sf::Vertex cadreScore[] =
@@ -928,6 +927,7 @@ void afficherScoreEnnemi(sf::RenderWindow &window, sf::Font font, int ennemyScor
 
 }
 
+//Affiche la prochaine pièce à tomber, commune aux deux joueurs (mode 2 joueurs)
 
 void afficherProchainePieceCommune(sf::RenderWindow &window, Board board, sf::Font font){
 
@@ -1036,6 +1036,8 @@ void afficherProchainePieceCommune(sf::RenderWindow &window, Board board, sf::Fo
 
 }
 
+//affiche le plateau adverse, sera raffraichi à la fin de chaque tour  (mode 2 joueurs)
+
 void afficherPlateauEnnemi(sf::RenderWindow &window, int plateauEnnemi[hauteur][largeur]){
 
 
@@ -1095,7 +1097,7 @@ void afficherPlateauEnnemi(sf::RenderWindow &window, int plateauEnnemi[hauteur][
   }
 }
 
-
+//Affiche l'entièreté du plateau en un seul appel (mode 2 joueurs)
 
 void afficherJeuDeuxJoueurs(sf::RenderWindow &window, sf::Font font, Board allyBoard, int plateauEnnemi[hauteur][largeur], int allyScore, int ennemyScore){
   afficherPlateau(window, allyBoard);
