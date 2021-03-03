@@ -16,7 +16,7 @@ board.o: board.cpp
 piece.o: piece.cpp
 	$(CC) -c $^ $(CFLAGS)
 
-main.o: main.cpp board.cpp board.h
+main.o: main.cpp board.cpp
 	$(CC) -c $^ $(CFLAGS)
 
 clean:
