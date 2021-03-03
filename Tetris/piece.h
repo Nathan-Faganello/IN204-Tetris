@@ -217,42 +217,24 @@ private:
 	Couleur couleur;
 
 public:
-	Piece(){}
-	Piece(Type theType, int theRota, int theX, int theY, Couleur theColor): type(theType), rotation(theRota), position_X(theX), position_Y(theY), couleur(theColor) {}
+
+
+	Piece();
+	Piece(Type theType, int theRota, int theX, int theY, Couleur theColor);
 
 
 
 
-	void setType(Type theType) {
-		type = theType;
-	}
-	void setRota(int theRota) {
-		rotation = theRota;
-	}
-	void setCouleur(Couleur theColor) {
-		couleur = theColor;
-	}
-	void setPosX(int theX) {
-		position_X = theX;
-	}
-	void setPosY(int theY) {
-		position_Y = theY;
-	}
-	Type getType() {
-		return type;
-	}
-	int getRota() {
-		return rotation;
-	}
-	int getPosX() {
-		return position_X;
-	}
-	int getPosY() {
-		return position_Y;
-	}
-	Couleur getCouleur() {
-		return couleur;
-	}
+	void setType(Type theType);
+	void setRota(int theRota);
+	void setCouleur(Couleur theColor);
+	void setPosX(int theX);
+	void setPosY(int theY);
+	Type getType();
+	int getRota();
+	int getPosX();
+	int getPosY();
+	Couleur getCouleur();
 
 	friend sf::Packet& operator <<(sf::Packet& packet, const Piece& piece); //surcharge d'opérateur pour manipuler plus facilement ensemble les packets et les pièces.
 	friend sf::Packet& operator >>(sf::Packet& packet, Piece& piece);
@@ -261,35 +243,6 @@ public:
 
 
 
-sf::Packet& operator <<(sf::Packet& packet, const Piece& piece)
-{
-		sf::Uint8 type = (sf::Uint8) piece.type;
-		sf::Uint8 rota = (sf::Uint8) piece.rotation;
-		sf::Uint8 posX = (sf::Uint8) piece.position_X;
-		sf::Uint8 posY = (sf::Uint8) piece.position_Y;
-		sf::Uint8 color = (sf::Uint8) piece.couleur;
 
-
-		return (packet << type << rota << posX << posY << color);
-}
-
-sf::Packet& operator >>(sf::Packet& packet, Piece& piece)
-{
-		sf::Uint8 type;
-		sf::Uint8 rota;
-		sf::Uint8 posX;
-		sf::Uint8 posY;
-		sf::Uint8 color;
-
-		packet >> type >> rota >> posX >> posY >> color;
-
-		piece.type= (Type)type;
-		piece.rotation=(int)rota;
-		piece.position_X=(int)posX;
-		piece.position_Y=(int)posY;
-		piece.couleur=(Couleur)color;
-
-		return packet ;
-}
 
 #endif // !PIECE_H

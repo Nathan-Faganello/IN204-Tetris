@@ -7,11 +7,17 @@ EXEC=sfml-app
 all: $(EXEC)
 
 
-sfml-app: main.o
+sfml-app: main.o piece.o board.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-main.o: main.cpp piece.h
-	$(CC) -c $< $(CFLAGS)
+board.o: board.cpp
+	$(CC) -c $^ $(CFLAGS)
+
+piece.o: piece.cpp
+	$(CC) -c $^ $(CFLAGS)
+
+main.o: main.cpp board.cpp board.h
+	$(CC) -c $^ $(CFLAGS)
 
 clean:
 	rm -rf *.o
