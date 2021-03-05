@@ -216,6 +216,9 @@ int main()
                 else if(event.text.unicode==13){
                   char buffer[]="OK";
                   IPHote=sf::IpAddress(IPHoteTxt);
+                  while(IPHote == sf::IpAddress::None){
+                    std::cout<<"erreur adresse invalide"<<std::endl;
+                  }
                   portExterne=(unsigned short) std::stoi(portExterneTxt);
                   if (socket.send(buffer, sizeof(buffer), IPHote, portExterne)!=sf::Socket::Done){
                     statut=204;
