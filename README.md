@@ -8,8 +8,7 @@ Exécution: export LD_LIBRARY_PATH=External/SFML/lib && ./tetris-sfml
 
 # EXPLICATION DES STATUTS
 
-Chaque statut correspond à un "état du jeu", comme le choix du mode, le début de la partie, la pause, etc\
-
+Chaque statut correspond à un "état du jeu", comme le choix du mode, le début de la partie, la pause, etc 
 
 statut = -1, 0, 1 : menu
 
