@@ -30,7 +30,7 @@ statut = 200 : choix d'héberger ou de rejoindre une partie \
 statut = 201 : affichage de l'IP et du port de l'hôte si on est l'hôte, et attente de la connexion à l'autre joueur \
 statut = 202 : saisie clavier de l'IP de l'hôte (si on est l'invité) \
 statut = 203 : saisie clavier du port de l'hôte (si on est l'invité) \
-statut = 204 : affichage d'une erreur de connexion \
+statut = 204 : affichage d'une erreur de connexion  
 
 
 #### STATUTS 300+ : HÔTE
@@ -56,7 +56,7 @@ statut = 405 : boucle de jeu quand l'autre joueur a terminé \
 statut = 406 : affichage de ce que fait l'autre joueur quand l'hôte a fini et que l'autre joueur n'a pas fini \
 
 
-statut = 500 : affichage du résultat de la partie une fois terminée \
+statut = 500 : affichage du résultat de la partie une fois terminée  
 
 # REGLE MODE 2 JOUEURS
 
