@@ -155,7 +155,7 @@ int main()
             else if(statut==4){
               if (event.type == sf::Event::KeyPressed){
                 if (event.key.code == sf::Keyboard::Enter){
-                  statut=1;
+                  statut=-1;
                   board.clearPlateau();
                   score=0;
                 }
@@ -216,10 +216,8 @@ int main()
                 else if(event.text.unicode==13){
                   char buffer[]="OK";
                   IPHote=sf::IpAddress(IPHoteTxt);
-                  while(IPHote == sf::IpAddress::None){
-                    std::cout<<"erreur adresse invalide"<<std::endl;
-                  }
                   portExterne=(unsigned short) std::stoi(portExterneTxt);
+                  std::cout<<portExterne<<std::endl;
                   if (socket.send(buffer, sizeof(buffer), IPHote, portExterne)!=sf::Socket::Done){
                     statut=204;
                   }
@@ -265,6 +263,25 @@ int main()
                 }
               }
             }
+            else if(statut==500){
+              if (event.type == sf::Event::KeyPressed){
+                if (event.key.code == sf::Keyboard::Enter){
+                  statut=-1;
+                  niveau=0;
+                  statut=0;
+                  score=0;
+                  scoreAdverse=0;
+                  NbLignes=0;
+                  statutPause=0;
+                  multijoueur=0;
+                  heberge=0;
+                  IPHoteTxt="";
+                  portExterneTxt="";
+                  portExterne=0;
+                  board.clearPlateau();
+                }
+              }
+            }
           }
 
 
@@ -281,13 +298,13 @@ int main()
 				}
 
 
-        else if(statut==-1){
+        else if(statut==-1){ //choix mode solo ou multijoueur
           window.clear();
           afficherMulti(window, font, multijoueur);
           window.display();
         }
 
-				else if(statut==1){  //choix du niveau
+				else if(statut==1){  //choix du niveau (mode solo)
 					window.clear();
           afficherNiveau(window, font, niveau);
 					window.display();
@@ -1181,8 +1198,8 @@ int main()
           bool win = score>scoreAdverse;
           window.clear();
           afficherResultat(window, font, score, scoreAdverse, win);
-          window.display();
         }
+        window.display();
       }
 
 

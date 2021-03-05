@@ -1159,6 +1159,17 @@ void afficherMatchNul(sf::RenderWindow &window, sf::Font font, int score){
 
 
   window.draw(valScore);
+
+  sf::Text line5;
+  line5.setString("Appuyez sur Entree pour continuer");
+  line5.setFont(font);
+  line5.setCharacterSize(30);
+  line5.setFillColor(sf::Color::White);
+
+  textRect = line5.getLocalBounds();
+  line5.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line5.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+80));
+  window.draw(line5);
 }
 
 
@@ -1229,4 +1240,15 @@ void afficherResultat(sf::RenderWindow &window, sf::Font font, int score, int sc
 
 
   window.draw(valScoreAdv);
+
+  sf::Text line5;
+  line5.setString("Appuyez sur Entree pour continuer");
+  line5.setFont(font);
+  line5.setCharacterSize(30);
+  line5.setFillColor(sf::Color::White);
+
+  textRect = line5.getLocalBounds();
+  line5.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  line5.setPosition(sf::Vector2f(1080/2.0f,720/2.0f+80));
+  window.draw(line5);
 }
