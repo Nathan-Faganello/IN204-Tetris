@@ -53,7 +53,7 @@ statut = 402 : réception de la première pièce \
 statut = 403 : affichage jeu en mode 2 joueurs avant le début de la partie \
 statut = 404 : boucle de jeu quand les deux joueurs jouent \
 statut = 405 : boucle de jeu quand l'autre joueur a terminé \
-statut = 406 : affichage de ce que fait l'autre joueur quand l'hôte a fini et que l'autre joueur n'a pas fini \
+statut = 406 : affichage de ce que fait l'autre joueur quand l'hôte a fini et que l'autre joueur n'a pas fini  
 
 
 statut = 500 : affichage du résultat de la partie une fois terminée  
