@@ -41,7 +41,7 @@ statut = 301 : attente validation réception par l'invité + transmission de la 
 statut = 302 : affichage jeu en mode 2 joueurs avant le début de la partie \
 statut = 303 : boucle de jeu quand les deux joueurs jouent \
 statut = 304 : boucle de jeu quand l'autre joueur a terminé \
-statut = 305 : affichage de ce que fait l'autre joueur quand l'hôte a fini et que l'autre joueur n'a pas fini \
+statut = 305 : affichage de ce que fait l'autre joueur quand l'hôte a fini et que l'autre joueur n'a pas fini  
 
 
 #### STATUTS 400+ : INVITE
