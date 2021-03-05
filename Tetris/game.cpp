@@ -1109,6 +1109,8 @@ void envoiScore(sf::Packet &packet, const int score){
   packet<<scoreSF;
 }
 
+
+
 //Affiche l'entièreté du plateau en un seul appel (mode 2 joueurs)
 
 void afficherJeuDeuxJoueurs(sf::RenderWindow &window, sf::Font font, Board allyBoard, int plateauEnnemi[hauteur][largeur], int allyScore, int ennemyScore){
@@ -1118,4 +1120,113 @@ void afficherJeuDeuxJoueurs(sf::RenderWindow &window, sf::Font font, Board allyB
   afficherProchainePieceCommune(window, allyBoard, font);
   afficherPlateauEnnemi(window, plateauEnnemi);
 
+}
+
+
+void afficherMatchNul(sf::RenderWindow &window, sf::Font font, int score){
+  sf::Text msgMatchNul;
+  msgMatchNul.setString("Match nul!");
+  msgMatchNul.setFont(font);
+  msgMatchNul.setCharacterSize(40);
+  msgMatchNul.setFillColor(sf::Color::White);
+  sf::FloatRect textRect = msgMatchNul.getLocalBounds();
+  msgMatchNul.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  msgMatchNul.setPosition(sf::Vector2f(1080/2.0f,150));
+
+  window.draw(msgMatchNul);
+
+  sf::Text msgScore;
+  msgScore.setString("Score :");
+  msgScore.setFont(font);
+  msgScore.setCharacterSize(30);
+  msgScore.setFillColor(sf::Color::White);
+  textRect = msgScore.getLocalBounds();
+  msgScore.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  msgScore.setPosition(sf::Vector2f(1080/2.0f,205));
+
+  window.draw(msgScore);
+
+  std::string textScore=std::to_string(score);
+
+  sf::Text valScore;
+  valScore.setString(textScore);
+  valScore.setFont(font);
+  valScore.setCharacterSize(30);
+  valScore.setFillColor(sf::Color::White);
+  textRect = valScore.getLocalBounds();
+  valScore.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  valScore.setPosition(sf::Vector2f(1080/2.0f,350));
+
+
+  window.draw(valScore);
+}
+
+
+void afficherResultat(sf::RenderWindow &window, sf::Font font, int score, int scoreAdverse, bool win){
+  sf::Text msgResultat;
+  if (win){
+      msgResultat.setString("Victoire");
+  }
+  else{
+      msgResultat.setString("Defaite");
+  }
+
+  msgResultat.setFont(font);
+  msgResultat.setCharacterSize(40);
+  msgResultat.setFillColor(sf::Color::White);
+  sf::FloatRect textRect = msgResultat.getLocalBounds();
+  msgResultat.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  msgResultat.setPosition(sf::Vector2f(1080/2.0f,250));
+
+  window.draw(msgResultat);
+
+  sf::Text msgScore;
+  msgScore.setString("Votre score :");
+  msgScore.setFont(font);
+  msgScore.setCharacterSize(30);
+  msgScore.setFillColor(sf::Color::White);
+  textRect = msgScore.getLocalBounds();
+  msgScore.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  msgScore.setPosition(sf::Vector2f(1080/2.0f-50,305));
+
+  window.draw(msgScore);
+
+  std::string textScore=std::to_string(score);
+
+  sf::Text valScore;
+  valScore.setString(textScore);
+  valScore.setFont(font);
+  valScore.setCharacterSize(30);
+  valScore.setFillColor(sf::Color::White);
+  textRect = valScore.getLocalBounds();
+  valScore.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  valScore.setPosition(sf::Vector2f(1080/2.0f+40,305));
+
+
+  window.draw(valScore);
+
+  sf::Text msgScoreAdv;
+  msgScoreAdv.setString("Score adverse :");
+  msgScoreAdv.setFont(font);
+  msgScoreAdv.setCharacterSize(30);
+  msgScoreAdv.setFillColor(sf::Color::White);
+  textRect = msgScoreAdv.getLocalBounds();
+  msgScoreAdv.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  msgScoreAdv.setPosition(sf::Vector2f(1080/2.0f-50,350));
+
+  window.draw(msgScoreAdv);
+
+  std::string textScoreAdv=std::to_string(scoreAdverse);
+
+  sf::Text valScoreAdv;
+  valScoreAdv.setString(textScoreAdv);
+  valScoreAdv.setFont(font);
+  valScoreAdv.setCharacterSize(30);
+  valScoreAdv.setFillColor(sf::Color::White);
+  textRect = valScoreAdv.getLocalBounds();
+  valScoreAdv.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+  valScoreAdv.setPosition(sf::Vector2f(1080/2.0f+40,350));
+
+
+  window.draw(valScoreAdv);
 }

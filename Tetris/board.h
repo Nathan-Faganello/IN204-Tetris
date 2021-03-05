@@ -99,6 +99,8 @@ class Board {
 
 };
 
+//rempli le tableau plateauInt avec les valeurs du tableau plateauRecu, converties de sf::Uint8 en int
+
 void convertPlateau (sf::Uint8 plateauRecu[hauteur][largeur], int (&plateauInt)[hauteur][largeur]);
 
 

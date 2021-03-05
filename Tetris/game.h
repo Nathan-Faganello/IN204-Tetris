@@ -115,6 +115,13 @@ void envoiScore(sf::Packet &packet, const int score);
 
 void afficherJeuDeuxJoueurs(sf::RenderWindow &window, sf::Font font, Board allyBoard, int plateauEnnemi[hauteur][largeur], int allyScore, int ennemyScore);
 
+//Affiche le résultat en cas d'égalité du score
+
+void afficherMatchNul(sf::RenderWindow &window, sf::Font font, int score);
+
+//Affiche le résultat de la partie, varie si le joueur a gagné (win == true) ou perdu (win == false)
+
+void afficherResultat(sf::RenderWindow &window, sf::Font font, int score, int scoreAdverse, bool win);
 
 
 #endif // !GAME_H
