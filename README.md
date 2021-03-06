@@ -1,5 +1,6 @@
 # IN204-Tetris
 
+IMPORTANT : le Tetris est fait pour marcher dans un environnement Linux. Sous d'autres OS, la bibliothèque SFML telle qu'on l'a utilisée n'est pas compatible.
 
 Compilation : make tetris-sfml clean dans le dossier Tetris\
 Exécution: export LD_LIBRARY_PATH=External/SFML/lib && ./tetris-sfml
