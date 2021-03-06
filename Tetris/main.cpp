@@ -48,7 +48,8 @@ int main()
     sf::Time tempsChute;
     sf::Time deltaT;
 
-    sf::UdpSocket socket;
+    sf::TcpSocket socket;
+    sf::TcpListener listener;
 
     // lie la socket à un port
     if (socket.bind(sf::Socket::AnyPort) != sf::Socket::Done)
@@ -214,11 +215,11 @@ int main()
                   portExterneTxt.pop_back();
                 }
                 else if(event.text.unicode==13){
-                  char buffer[]="OK";
+                  //char buffer[]="OK";
                   IPHote=sf::IpAddress(IPHoteTxt);
                   portExterne=(unsigned short) std::stoi(portExterneTxt);
                   std::cout<<portExterne<<std::endl;
-                  if (socket.send(buffer, sizeof(buffer), IPHote, portExterne)!=sf::Socket::Done){
+                  if (socket.connect(IPHote, portExterne)!=sf::Socket::Done){
                     statut=204;
                   }
                   else{
@@ -254,7 +255,7 @@ int main()
                   sf::Packet packNiv;
                   sf::Uint8 nivConvert = (sf::Uint8) niveau;
                   packNiv<<nivConvert;
-                  socket.send(packNiv, IPInvite, portExterne);
+                  socket.send(packNiv);
                   packNiv.clear();
                   statut++;
                 }
@@ -477,13 +478,19 @@ int main()
 
 
         window.clear();
-        sf::IpAddress addressIP = sf::IpAddress::getPublicAddress();
+        sf::IpAddress addressIP = sf::IpAddress::getLocalAddress();
         afficherIP(window, font, addressIP, localPort);
         window.display();
-        socket.receive(buffer, sizeof(buffer), received, IPInvite, portExterne);
-        std::string txtTest(buffer, received);
-        char OK[]="OK";
-        if(strcmp(txtTest.c_str(), OK)!=0){
+        //socket.receive(buffer, sizeof(buffer), received, IPInvite, portExterne);
+        if(listener.listen(localPort)!= sf::Socket::Done){
+          statut = 204;
+        }
+        //std::string txtTest(buffer, received);
+        //char OK[]="OK";
+        //if(strcmp(txtTest.c_str(), OK)!=0){
+        //  statut=204;
+        //}
+        if(listener.accept(socket) != sf::Socket::Done){
           statut=204;
         }
         else{
@@ -526,12 +533,12 @@ int main()
         window.display();
         sf::Packet packet;
         std::string ready;
-        socket.receive(packet, IPInvite, portExterne);
+        socket.receive(packet);
         packet>>ready;
         if (ready.compare("ready")==0){
           sf::Packet nextPiece;
           nextPiece<<board.getPieceSuivante();
-          socket.send(nextPiece, IPInvite, portExterne);
+          socket.send(nextPiece);
           nextPiece.clear();
           statut++;
         }
@@ -549,7 +556,7 @@ int main()
         sf::sleep(t1);
         sf::Packet nextPiece;
         nextPiece<<board.getPieceSuivante();
-        socket.send(nextPiece, IPInvite, portExterne);
+        socket.send(nextPiece);
         statut++;
 
       }
@@ -638,12 +645,12 @@ int main()
 
           sf::Packet packetPieceSuiv;
           packetPieceSuiv<<board.getPieceSuivante();
-          socket.send(packetPieceSuiv, IPInvite, portExterne);
+          socket.send(packetPieceSuiv);
           packetPieceSuiv.clear();
 
           int scoreTemp;
           sf::Packet packetScore;
-          socket.receive(packetScore, IPInvite, portExterne);
+          socket.receive(packetScore);
           recepScore(packetScore, scoreTemp);
           packetScore.clear();
           if (scoreTemp==-1){
@@ -655,24 +662,24 @@ int main()
 
           if(!board.pieceSpawnable(board.getPieceCourante())){
             envoiScore(packetScore, -1);
-            socket.send(packetScore, IPInvite, portExterne);
+            socket.send(packetScore);
             packetScore.clear();
             statut = 305;
           }
           else{
             envoiScore(packetScore, score);
-            socket.send(packetScore, IPInvite, portExterne);
+            socket.send(packetScore);
             packetScore.clear();
           }
 
           std::size_t tailleEnvoi=(std::size_t)hauteur*largeur*sizeof(sf::Uint8);
           std::size_t received;
-          socket.receive(plateauPacket, tailleEnvoi, received, IPInvite, portExterne);
+          socket.receive(plateauPacket);
           if (received==tailleEnvoi){
             convertPlateau(plateauPacket, plateauAdverse);
           }
           board.plateauEnvoi(plateauPacket);
-          socket.send(plateauPacket, tailleEnvoi, IPInvite, portExterne);
+          socket.send(plateauPacket, tailleEnvoi);
 
 
 
@@ -781,19 +788,19 @@ int main()
 
           if(!board.pieceSpawnable(board.getPieceCourante())){
             envoiScore(packetScore, -1);
-            socket.send(packetScore, IPInvite, portExterne);
+            socket.send(packetScore);
             packetScore.clear();
             statut = 500;
           }
           else{
             envoiScore(packetScore, score);
-            socket.send(packetScore, IPInvite, portExterne);
+            socket.send(packetScore);
             packetScore.clear();
           }
 
           std::size_t tailleEnvoi=(std::size_t)hauteur*largeur*sizeof(sf::Uint8);
           board.plateauEnvoi(plateauPacket);
-          socket.send(plateauPacket, tailleEnvoi, IPInvite, portExterne);
+          socket.send(plateauPacket, tailleEnvoi);
 
 
 
@@ -819,7 +826,7 @@ int main()
 
         int scoreTemp;
         sf::Packet packetScore;
-        socket.receive(packetScore, IPInvite, portExterne);
+        socket.receive(packetScore);
         recepScore(packetScore, scoreTemp);
         packetScore.clear();
         if (scoreTemp==-1){
@@ -832,7 +839,7 @@ int main()
 
         std::size_t tailleEnvoi=(std::size_t)hauteur*largeur*sizeof(sf::Uint8);
         std::size_t received;
-        socket.receive(plateauPacket, tailleEnvoi, received, IPInvite, portExterne);
+        socket.receive(plateauPacket);
         if (received==tailleEnvoi){
           convertPlateau(plateauPacket, plateauAdverse);
         }
@@ -854,7 +861,7 @@ int main()
         afficherAttenteChoixNiveau(window, font);
         window.display();
         sf::Packet nivRecu;
-        socket.receive(nivRecu, IPHote, portExterne);
+        socket.receive(nivRecu);
         sf::Uint8 valNiv;
         nivRecu>>valNiv;
         niveau=(int)valNiv;
@@ -873,14 +880,14 @@ int main()
         sf::Packet packet;
         std::string ready = "ready";
         packet<<ready;
-        socket.send(packet, IPHote, portExterne);
+        socket.send(packet);
         statut++;
       }
 
       else if (statut == 402){
         Piece pieceRecue;
         sf::Packet packetPieceRecue;
-        socket.receive(packetPieceRecue, IPHote, portExterne);
+        socket.receive(packetPieceRecue);
         packetPieceRecue>>pieceRecue;
         board.setPieceSuivante(pieceRecue);
         packetPieceRecue.clear();
@@ -895,7 +902,7 @@ int main()
         board.setPieceCourante();
         Piece pieceRecue;
         sf::Packet packetPieceRecue;
-        socket.receive(packetPieceRecue, IPHote, portExterne);
+        socket.receive(packetPieceRecue);
         packetPieceRecue>>pieceRecue;
         board.setPieceSuivante(pieceRecue);
         board.AfficherPiece();
@@ -986,7 +993,7 @@ int main()
 
           Piece pieceRecue;
           sf::Packet packetPieceRecue;
-          socket.receive(packetPieceRecue, IPHote, portExterne);
+          socket.receive(packetPieceRecue);
           packetPieceRecue>>pieceRecue;
           board.setPieceSuivante(pieceRecue);
           packetPieceRecue.clear();
@@ -995,18 +1002,18 @@ int main()
 
           if(!board.pieceSpawnable(board.getPieceCourante())){
             envoiScore(packetScore, -1);
-            socket.send(packetScore, IPHote, portExterne);
+            socket.send(packetScore);
             packetScore.clear();
             statut = 406;
           }
           else{
             envoiScore(packetScore, score);
-            socket.send(packetScore, IPHote, portExterne);
+            socket.send(packetScore);
             packetScore.clear();
           }
 
           int scoreTemp;
-          socket.receive(packetScore, IPHote, portExterne);
+          socket.receive(packetScore);
           recepScore(packetScore, scoreTemp);
           packetScore.clear();
 
@@ -1020,9 +1027,9 @@ int main()
 
           board.plateauEnvoi(plateauPacket);
           std::size_t tailleEnvoi=(std::size_t)hauteur*largeur*sizeof(sf::Uint8);
-          socket.send(plateauPacket, tailleEnvoi, IPHote, portExterne);
+          socket.send(plateauPacket, tailleEnvoi);
           std::size_t received;
-          socket.receive(plateauPacket, tailleEnvoi, received, IPHote, portExterne);
+          socket.receive(plateauPacket, tailleEnvoi);
           if (received==tailleEnvoi){
             convertPlateau(plateauPacket, plateauAdverse);
           }
@@ -1127,20 +1134,20 @@ int main()
 
           if(!board.pieceSpawnable(board.getPieceCourante())){
             envoiScore(packetScore, -1);
-            socket.send(packetScore, IPHote, portExterne);
+            socket.send(packetScore);
             packetScore.clear();
             statut = 500;
           }
           else{
             envoiScore(packetScore, score);
-            socket.send(packetScore, IPHote, portExterne);
+            socket.send(packetScore);
             packetScore.clear();
           }
 
 
           board.plateauEnvoi(plateauPacket);
           std::size_t tailleEnvoi=(std::size_t)hauteur*largeur*sizeof(sf::Uint8);
-          socket.send(plateauPacket, tailleEnvoi, IPHote, portExterne);
+          socket.send(plateauPacket, tailleEnvoi);
 
 
 
@@ -1162,7 +1169,7 @@ int main()
 
         int scoreTemp;
         sf::Packet packetScore;
-        socket.receive(packetScore, IPHote, portExterne);
+        socket.receive(packetScore);
         recepScore(packetScore, scoreTemp);
         packetScore.clear();
         if (scoreTemp==-1){
@@ -1175,7 +1182,7 @@ int main()
 
         std::size_t tailleEnvoi=(std::size_t)hauteur*largeur*sizeof(sf::Uint8);
         std::size_t received;
-        socket.receive(plateauPacket, tailleEnvoi, received, IPHote, portExterne);
+        socket.receive(plateauPacket, tailleEnvoi);
         if (received==tailleEnvoi){
           convertPlateau(plateauPacket, plateauAdverse);
         }
